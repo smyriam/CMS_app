@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf.urls.static import static
 from CMS import settings
 from CMS_app import views
@@ -22,4 +22,8 @@ from CMS_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test', views.ShowTestPage),
+    path('', views.ShowLoginPage),
+    path('login', views.Login),
+    path('user_details', views.UserDetails),
+    path('logout', views.Logout, name="logout")
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
