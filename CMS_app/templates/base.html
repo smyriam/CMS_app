@@ -40,7 +40,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-    <h4 style="margin-left: 10px;margin-top: 5px;">Dashboard</h4>
+                <h4 class="m-0 text-dark">
+                {% block page_title %}
+                {% endblock page_title %}
+            </h4>
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
 
@@ -56,23 +59,7 @@
   <!-- Content Wrapper. Contains page content -->
    <div class="content-wrapper">
        <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">
-                {% block page_title %}
-                {% endblock page_title %}
-            </h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Dashboard</a></li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
+
     <!-- /.content-header -->
      {% block main_content %}{% endblock main_content %}
 

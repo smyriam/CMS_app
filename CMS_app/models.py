@@ -45,7 +45,7 @@ class Division(models.Model):
 
 class Funding(models.Model):
     id = models.AutoField(primary_key=True)
-    structure = (('proprii', 'Fonduri proprii'), ('altele', 'Alte fonduri'))
+    structure_options = (('proprii', 'Fonduri proprii'), ('altele', 'Alte fonduri'))
     substructure = models.CharField(max_length=64)
     objects = models.Manager()
 
@@ -54,13 +54,14 @@ class Employee(models.Model):
     id = models.AutoField(primary_key=True)
     employee_name = models.CharField(max_length=64)
     email = models.EmailField(max_length=128)
-    structure = (('central', 'Central'), ('regional', 'Regional'))
-    division_id = models.ForeignKey(Division, on_delete=models.DO_NOTHING)
+    structure = models.ForeignKey(Division, on_delete=models.DO_NOTHING, null=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
+    def __str__(self):
+        return f'{self.employee_name}'
 
 class CourseEmployee(models.Model):
     id = models.AutoField(primary_key=True)

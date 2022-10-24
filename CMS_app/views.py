@@ -1,10 +1,12 @@
 from django.contrib.auth import login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from CMS_app.backend import Backend
 from django.contrib import messages
-from django.urls import reverse
-from CMS_app.models import UserInstance
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from CMS_app.forms import AddEmployee
+from CMS_app.backend import Backend
+from CMS_app.models import Employee
 
 
 # Create your views here.
@@ -48,3 +50,9 @@ def doLogout(request):
 def AdminHome(request):
     return render(request, "base.html")
 
+
+class AddEmployeeView(CreateView):
+    template_name = 'employee/add_employee.html'
+    model = Employee
+    form_class = AddEmployee
+    success_url = reverse_lazy('admin-home')
