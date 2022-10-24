@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('test', views.ShowTestPage),
     path('', views.ShowLoginPage),
-    path('login', views.Login),
+    path('login', views.doLogin),
     path('user_details', views.UserDetails),
-    path('logout', views.Logout, name="logout")
-] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    path('logout', views.doLogout, name="logout"),
+    path('home', views.AdminHome, name="admin-home"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
