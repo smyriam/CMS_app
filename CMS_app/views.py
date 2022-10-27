@@ -1,12 +1,13 @@
 from django.contrib.auth import login, logout
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from CMS_app.forms import AddEmployee
+from django.views.generic import CreateView, ListView
+from CMS_app.forms import AddEmployee, EmployeeForm
 from CMS_app.backend import Backend
 from CMS_app.models import Employee
+import json
 
 
 # Create your views here.
@@ -55,4 +56,15 @@ class AddEmployeeView(CreateView):
     template_name = 'employee/add_employee.html'
     model = Employee
     form_class = AddEmployee
-    success_url = reverse_lazy('admin-home')
+    success_url = reverse_lazy('list-of-employees')
+
+
+class EmployeesList(ListView):
+    template_name = 'employee/list_of_employees.html'
+    model = Employee
+    context_object_name = 'all_employees'
+
+
+def DeleteEmployee(request, pk):
+    Employee.objects.filter(id=pk).delete()
+    return redirect('list-of-employees')

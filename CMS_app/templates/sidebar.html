@@ -28,22 +28,13 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-header">EMPLOYEE</li>
                 <li class="nav-item">
-                        {% url 'add-employee' as add_employee %}
-                        <a href="{{ add_employee }}"
-                           class="nav-link {% if request.path == add_employee %} active {% endif %}">
-                            <i class="nav-icon fas fa-user-plus"></i>
-                            <p>
-                                Add Employee
-                            </p>
-                        </a>
-                </li>
-                <li class="nav-item">
-                    <a href="%" class="nav-link">
-                        <i class="nav-icon fas fa-list"></i>
+                        {% url 'list-of-employees' as list_of_employees %}
+                        <a href="{{ list_of_employees }}"
+                           class="nav-link {% if request.path == list_of_employees %} active {% endif %}">
+                        <i class="nav-icon fas fa-address-book"></i>
                         <p>
-                            Manage Employees
+                            Employees
                         </p>
                     </a>
                 </li>

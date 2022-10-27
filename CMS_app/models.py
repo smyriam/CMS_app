@@ -37,10 +37,14 @@ class Course(models.Model):
 
 
 class Division(models.Model):
+    structure_options = (('central', 'Central'), ('regional', 'Regional'))
     id = models.AutoField(primary_key=True)
-    structure = (('central', 'Central'), ('regional', 'Regional'))
+    structure = models.CharField(choices=structure_options, max_length=8)
     division_name = models.CharField(max_length=64)
     objects = models.Manager()
+
+    def __str__(self):
+        return f'{self.division_name} - {self.structure}'
 
 
 class Funding(models.Model):
@@ -51,17 +55,20 @@ class Funding(models.Model):
 
 
 class Employee(models.Model):
+    structure_options = (('central', 'Central'), ('regional', 'Regional'))
     id = models.AutoField(primary_key=True)
-    employee_name = models.CharField(max_length=64)
-    email = models.EmailField(max_length=128)
-    structure = models.ForeignKey(Division, on_delete=models.DO_NOTHING, null=True)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
+    email = models.EmailField(blank=True, max_length=128)
+    structure = models.CharField(choices=structure_options, max_length=8)
+    division = models.ForeignKey(Division, on_delete=models.DO_NOTHING, null=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
     def __str__(self):
-        return f'{self.employee_name}'
+        return f'{self.first_name}{self.last_name}'
 
 class CourseEmployee(models.Model):
     id = models.AutoField(primary_key=True)

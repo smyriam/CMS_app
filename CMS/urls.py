@@ -25,7 +25,9 @@ urlpatterns = [
     path('', views.ShowLoginPage),
     path('login', views.doLogin),
     path('user_details', views.UserDetails),
-    path('logout', views.doLogout, name="logout"),
-    path('home', views.AdminHome, name="admin-home"),
-    path('add_employee', views.AddEmployeeView.as_view(), name="add-employee"),
+    path('logout', views.doLogout, name='logout'),
+    path('home', views.AdminHome, name='admin-home'),
+    path('add_employee', views.AddEmployeeView.as_view(), name='add-employee'),
+    path('list_of_employees', views.EmployeesList.as_view(), name='list-of-employees'),
+    path('delete_employee/<int:pk>/', views.DeleteEmployee, name='delete-employee'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
