@@ -4,10 +4,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
-from CMS_app.forms import AddEmployee, EmployeeForm
+from CMS_app.forms import AddEmployee, AddCourse, EmployeeForm
 from CMS_app.backend import Backend
-from CMS_app.models import Employee
-import json
+from CMS_app.models import Employee, Course, Division
+from django import forms
 
 
 # Create your views here.
@@ -68,3 +68,23 @@ class EmployeesList(ListView):
 def DeleteEmployee(request, pk):
     Employee.objects.filter(id=pk).delete()
     return redirect('list-of-employees')
+
+
+class AddCourseView(CreateView):
+    template_name = 'course/add_course.html'
+    model = Course
+    form_class = AddCourse
+    success_url = reverse_lazy('list-of-courses')
+
+
+class CoursesList(ListView):
+    template_name = 'course/list_of_courses.html'
+    model = Course
+    context_object_name = 'all_courses'
+
+
+def DeleteCourse(request, pk):
+    Course.objects.filter(id=pk).delete()
+    return redirect('list-of-courses')
+
+

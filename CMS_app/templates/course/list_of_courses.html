@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Courses
+{% endblock page_title %}
+{% block page_button %}
+    <div class="col">
+        <a class="btn btn-block btn-primary" href="{% url 'add-course' %}">New Employee</a>
+    </div>
+
+    <div class="col">
+        <a class="btn btn-block btn-primary" data-toggle="modal" href="#new_employee">Modal</a>
+    </div>
+
+{% endblock page_button %}
+
+{% block main_content %}
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <br>
+                    <div class="card card-link">
+                        <!-- /.card-header -->
+                        <!-- table start -->
+
+                        {% if all_courses %}
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Course Name</th>
+                                        <th scope="col">Start Date</th>
+                                        <th scope="col">End Date</th>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Location Details</th>
+                                        <th scope="col">Provider</th>
+                                        <th scope="col">Fee</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for course in all_courses %}
+                                        <tr>
+                                            <td>{{ course.course_name }}</td>
+                                            <td>{{ course.start_date }}</td>
+                                            <td>{{ course.end_date }}</td>
+                                            <td>{{ course.location }}</td>
+                                            <td>{{ course.location_details }}</td>
+                                            <td>{{ course.provider }}</td>
+                                            <td>{{ course.participation_fee }}</td>
+                                            <td width="120">
+                                                {#                                                <i class="fas fa-graduation-cap mr-3" aria-hidden="true"></i>#}
+                                                {#                                                <i class="fas fa-edit mr-3 blue-text" aria-hidden="true"></i>#}
+
+
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-light btn-sm">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm">
+                                                        <i class="fas fa-pen"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#course_{{ course.id }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+
+                                                {#                                                <button type="button" class="btn btn-block btn-light btn-xs"#}
+                                                {#                                                        data-toggle="modal"#}
+                                                {#                                                        data-target="#employee_{{ employee.id }}">#}
+                                                {#                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>#}
+                                                {#                                                </button>#}
+
+                                            </td>
+                                        </tr>
+
+                                        <div class="modal fade" id="course_{{ course.id }}">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            Delete course {{ course.course_name }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        This operation cannot be undone. <br>
+                                                        Are you sure you want to delete course
+                                                        <b>{{ course.course_name }}</b>?
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                                data-dismiss="modal">Close
+                                                        </button>
+                                                        <a href="{% url 'delete-course' course.id %}"
+                                                           class="btn btn-danger">Confirm Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        {% else %}
+                            <div class="card-body text-center"><br>
+                                <h4 class="text-muted">No data available</h4>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+
+
+    <div class="modal fade" id="new_employee">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        New Employee </h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>First Neme</label>
+                                <input type="text" class="form-control" placeholder="Enter first name" name="first_name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" placeholder="Enter last name" name="last_name">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" placeholder="Enter email" name="email">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label>Structure</label>
+                                <select class="form-control" name="structure">
+                                    <option>option 1</option>
+                                    <option>option 2</option>
+                                    <option>option 3</option>
+                                    <option>option 4</option>
+                                    <option>option 5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label>Division</label>
+                                <select class="form-control" name="division">
+                                    <option>option 1</option>
+                                    <option>option 2</option>
+                                    <option>option 3</option>
+                                    <option>option 4</option>
+                                    <option>option 5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group clearfix">
+                                <div class="icheck-primary d-inline">
+                                    <input type="checkbox" id="checkboxActive" name="active">
+                                    <label for="checkboxPrimary3">
+                                        Active
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close
+                    </button>
+                    <a href="%"
+                       class="btn btn-default">Save Employee</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}
+
