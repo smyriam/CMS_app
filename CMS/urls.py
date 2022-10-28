@@ -22,9 +22,10 @@ from CMS_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test', views.ShowTestPage),
-    path('', views.ShowLoginPage),
+    path('', views.ShowLoginPage, name='login'),
     path('login', views.doLogin),
     path('user_details', views.UserDetails),
+    path('reset_password', views.ResetPassword, name='reset-password'),
     path('logout', views.doLogout, name='logout'),
     path('home', views.AdminHome, name='admin-home'),
     path('employees/add_form', views.AddEmployeeView.as_view(), name='add-employee'),

@@ -3,11 +3,11 @@
     Employees
 {% endblock page_title %}
 {% block page_button %}
+{#    <div class="col">#}
+{#        <a class="btn btn-block btn-primary" href="{% url 'add-employee' %}">Add Form</a>#}
+{#    </div>#}
     <div class="col">
-        <a class="btn btn-block btn-primary" href="{% url 'add-employee' %}">Add Form</a>
-    </div>
-    <div class="col">
-        <a class="btn btn-block btn-primary" data-toggle="modal" href="#new_employee">Add Modal</a>
+        <a class="btn btn-block btn-primary" data-toggle="modal" href="#new_employee">New Employee Modal</a>
     </div>
 
 {% endblock page_button %}
@@ -83,9 +83,9 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        This operation cannot be undone. <br>
                                                         Are you sure you want to delete
-                                                        <b>{{ employee.first_name }} {{ employee.last_name }}</b>?
+                                                        <b>{{ employee.first_name }} {{ employee.last_name }}</b>?<br>
+                                                        This operation cannot be undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"

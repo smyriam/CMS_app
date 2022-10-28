@@ -48,6 +48,10 @@ def doLogout(request):
     return HttpResponseRedirect("/")
 
 
+def ResetPassword(request):
+    return render(request, "reset_password.html")
+
+
 def AdminHome(request):
     return render(request, "base.html")
 
