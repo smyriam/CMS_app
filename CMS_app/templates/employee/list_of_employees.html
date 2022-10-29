@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block page_title %}
     Employees
 {% endblock page_title %}
 {% block page_button %}
-{#    <div class="col">#}
-{#        <a class="btn btn-block btn-primary" href="{% url 'add-employee' %}">Add Form</a>#}
-{#    </div>#}
+    {#    <div class="col">#}
+    {#        <a class="btn btn-block btn-primary" href="{% url 'add-employee' %}">Add Form</a>#}
+    {#    </div>#}
     <div class="col">
         <a class="btn btn-block btn-primary" data-toggle="modal" href="#new_employee">New Employee Modal</a>
     </div>
@@ -42,7 +43,11 @@
                                     <tbody>
                                     {% for employee in all_employees %}
                                         <tr>
-                                            <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                                            <td>
+                                                <a href="#">
+                                                    {{ employee.last_name }} {{ employee.first_name }}
+                                                </a>
+                                            </td>
                                             <td>{{ employee.structure }}</td>
                                             <td>{{ employee.division }}</td>
                                             <td>No data</td>
@@ -55,12 +60,12 @@
                                             <td width="20">
 
                                                 <div class="btn-group">
-{#                                                    <button type="button" class="btn btn-light btn-sm">#}
-{#                                                        <i class="fas fa-plus"></i>#}
-{#                                                    </button>#}
-{#                                                    <button type="button" class="btn btn-light btn-sm">#}
-{#                                                        <i class="fas fa-pen"></i>#}
-{#                                                    </button>#}
+                                                    {#                                                    <button type="button" class="btn btn-light btn-sm">#}
+                                                    {#                                                        <i class="fas fa-plus"></i>#}
+                                                    {#                                                    </button>#}
+                                                    {#                                                    <button type="button" class="btn btn-light btn-sm">#}
+                                                    {#                                                        <i class="fas fa-pen"></i>#}
+                                                    {#                                                    </button>#}
                                                     <button type="button" class="btn btn-light btn-sm"
                                                             data-toggle="modal"
                                                             data-target="#employee_{{ employee.id }}">
@@ -134,7 +139,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>First Neme</label>
+                                    <label>First Name</label>
                                     <input type="text" class="form-control" placeholder="Enter first name"
                                            name="first_name">
                                 </div>
@@ -188,24 +193,39 @@
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">Close
                         </button>
-                        <a href="%"
+                        <a href="#"
                            class="btn btn-primary">Save Employee</a>
                     </div>
                 </div>
             </form>
 
-{#            <form method="POST">#}
-{#                {% csrf_token %}#}
-{#                <div class="card-body">#}
-{#                    {{ form.as_p }}#}
-{#                </div>#}
-{#                <div class="card-footer">#}
-{#                    <button type="submit" class="btn btn-success">save</button>#}
-{#                </div>#}
-{#            </form>#}
+            {#            <form method="POST">#}
+            {#                {% csrf_token %}#}
+            {#                <div class="card-body">#}
+            {#                    {{ form.as_p }}#}
+            {#                </div>#}
+            {#                <div class="card-footer">#}
+            {#                    <button type="submit" class="btn btn-success">save</button>#}
+            {#                </div>#}
+            {#            </form>#}
 
         </div>
     </div>
+
+    <!-- JS Scripts  -->
+    <script src="{% static "dist/js/addEmployee.js" %}"></script>
+    <script>
+        function findMyForm(productKey) {
+            $('#editProductModalForm').modal('show');
+            $.ajax({
+                type: 'GET',
+                url: '/product/' + productKey + '/edit/',
+                success: function (res) {
+                    $("#showForm").html(res);
+                }
+            })
+        }
+    </script>
 
 {% endblock main_content %}
 

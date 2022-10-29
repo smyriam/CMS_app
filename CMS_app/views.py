@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -53,7 +53,9 @@ def ResetPassword(request):
 
 
 def AdminHome(request):
-    return render(request, "base.html")
+    employees_count = Employee.objects.all().count()
+    courses_count = Course.objects.all().count()
+    return render(request, "dashboard/dashboard.html", {"employees_count":employees_count, "courses_count":courses_count})
 
 
 class AddEmployeeView(CreateView):
@@ -61,6 +63,21 @@ class AddEmployeeView(CreateView):
     model = Employee
     form_class = AddEmployee
     success_url = reverse_lazy('list-of-employees')
+
+
+def AddEmployee(request):
+    if request.method == "POST":
+        form = AddEmployee(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return JsonResponse({'msg': 'Data saved'})
+        else:
+            print("ERROR FORM INVALID")
+            return JsonResponse({'msg': 'ERROR FORM INVALID'})
+    else:
+        form = AddEmployee()
+    return JsonResponse({'form': form})
 
 
 class EmployeesList(ListView):
