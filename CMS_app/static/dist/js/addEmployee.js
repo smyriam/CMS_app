@@ -1,10 +1,9 @@
-#addEmployee.js
-function addEmployee {
-    var addNewEmployee = $("#add_employee_form");
+function addEmployee(e) {
+    var AddEmployeeForm = $("#add_employee_form");
     $.ajax({
         type: 'POST',
         url: '/employees/new/',
-        data: addNewEmployee.serialize(),
+        data: AddEmployeeForm.serialize(),
         success: function(res){
             alert(res['msg'])
         }

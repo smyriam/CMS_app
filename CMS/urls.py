@@ -14,25 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.conf.urls.static import static
 from CMS import settings
 from CMS_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test', views.ShowTestPage),
-    path('', views.ShowLoginPage, name='login'),
-    path('login', views.doLogin),
-    path('user_details', views.UserDetails),
-    path('reset_password', views.ResetPassword, name='reset-password'),
-    path('logout', views.doLogout, name='logout'),
-    path('home', views.AdminHome, name='admin-home'),
-    path('employees/add_form', views.AddEmployeeView.as_view(), name='add-employee'),
-    path('employees/add', views.AddEmployee, name='add-new-employee'),
+    path('', views.show_login_page, name='login'),
+    path('home', views.admin_home, name='admin-home'),
+    path('login', views.do_login),
+    path('logout', views.do_logout, name='logout'),
+    path('user_details', views.user_details),
+    path('reset_password', views.reset_password, name='reset-password'),
+    path('employees/add_form', views.add_employee_view.as_view(), name='add-employee'),
+    path('employees/add', views.add_employee, name='add-new-employee'),
     path('employees', views.EmployeesList.as_view(), name='list-of-employees'),
-    path('employees/<int:pk>/delete/', views.DeleteEmployee, name='delete-employee'),
+    path('employees/<int:pk>/delete/', views.delete_employee, name='delete-employee'),
     path('courses/add', views.AddCourseView.as_view(), name='add-course'),
     path('courses', views.CoursesList.as_view(), name='list-of-courses'),
-    path('courses/<int:pk>/delete/', views.DeleteCourse, name='delete-course'),
+    path('courses/<int:pk>/delete/', views.delete_course, name='delete-course'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

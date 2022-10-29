@@ -241,18 +241,6 @@
 
     <!-- JS Scripts  -->
     <script src="{% static "dist/js/addEmployee.js" %}"></script>
-    <script>
-        function findMyForm(productKey) {
-            $('#editProductModalForm').modal('show');
-            $.ajax({
-                type: 'GET',
-                url: '/product/' + productKey + '/edit/',
-                success: function (res) {
-                    $("#showForm").html(res);
-                }
-            })
-        }
-    </script>
 
 {% endblock main_content %}
 

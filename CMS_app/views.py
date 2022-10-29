@@ -4,26 +4,21 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
-from CMS_app.forms import AddEmployee, AddCourse, EmployeeForm
+from CMS_app.forms import AddEmployeeForm, AddCourse, EmployeeForm
 from CMS_app.backend import Backend
-from CMS_app.models import Employee, Course, Division
-from django import forms
+from CMS_app.models import Employee, Course
 
 
 # Create your views here.
-def ShowTestPage(request):
-    return render(request, "test.html")
-
-
-def ShowBase(request):
+def show_base(request):
     return render(request, "base.html")
 
 
-def ShowLoginPage(request):
+def show_login_page(request):
     return render(request, "login.html")
 
 
-def doLogin(request):
+def do_login(request):
     if request.method != "POST":
         return HttpResponse("<h2>Not allowed</h2>")
     else:
@@ -36,38 +31,38 @@ def doLogin(request):
             return HttpResponseRedirect("/")
 
 
-def UserDetails(request):
+def user_details(request):
     if request.user != None:
         return HttpResponse("User : " + request.user.email)
     else:
         return HttpResponse("Please, login first")
 
 
-def doLogout(request):
+def do_logout(request):
     logout(request)
     return HttpResponseRedirect("/")
 
 
-def ResetPassword(request):
+def reset_password(request):
     return render(request, "reset_password.html")
 
 
-def AdminHome(request):
+def admin_home(request):
     employees_count = Employee.objects.all().count()
     courses_count = Course.objects.all().count()
     return render(request, "dashboard/dashboard.html", {"employees_count":employees_count, "courses_count":courses_count})
 
 
-class AddEmployeeView(CreateView):
+class add_employee_view(CreateView):
     template_name = 'employee/add_employee.html'
     model = Employee
-    form_class = AddEmployee
+    form_class = EmployeeForm
     success_url = reverse_lazy('list-of-employees')
 
 
-def AddEmployee(request):
+def add_employee(request):
     if request.method == "POST":
-        form = AddEmployee(request.POST)
+        form = AddEmployeeForm(request.POST)
 
         if form.is_valid():
             form.save(commit=True)
@@ -76,7 +71,7 @@ def AddEmployee(request):
             print("ERROR FORM INVALID")
             return JsonResponse({'msg': 'ERROR FORM INVALID'})
     else:
-        form = AddEmployee()
+        form = AddEmployeeForm()
     return JsonResponse({'form': form})
 
 
@@ -86,7 +81,7 @@ class EmployeesList(ListView):
     context_object_name = 'all_employees'
 
 
-def DeleteEmployee(request, pk):
+def delete_employee(request, pk):
     Employee.objects.filter(id=pk).delete()
     return redirect('list-of-employees')
 
@@ -104,7 +99,7 @@ class CoursesList(ListView):
     context_object_name = 'all_courses'
 
 
-def DeleteCourse(request, pk):
+def delete_course(request, pk):
     Course.objects.filter(id=pk).delete()
     return redirect('list-of-courses')
 

@@ -3,20 +3,10 @@ from django.forms import TextInput, EmailInput, Select, DateInput, NumberInput
 from CMS_app.models import Employee, Course, Division
 
 
-class AddEmployee(forms.ModelForm):
-    # structure_options = (('central', 'Central'), ('regional', 'Regional'))
-    # structure = forms.ChoiceField(choices=structure_options)
-    # division = forms.ModelChoiceField(queryset=Division.objects.all(), initial=0)
+class AddEmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = '__all__'
-
-        # widgets = {
-        #     'first_name' : TextInput(attrs={'autofocus': True, 'placeholder': 'Please enter first name', 'class': 'form-control'}),
-        #     'last_name': TextInput(attrs={'autofocus': True, 'placeholder': 'Please enter first name', 'class': 'form-control'}),
-        #     'email' : EmailInput(attrs={'placeholder': 'Please enter email', 'class': 'form-control'}),
-        #     'structure' : Select(attrs={'class': 'form-select'})
-        # }
 
 
 class EmployeeForm(forms.ModelForm):
