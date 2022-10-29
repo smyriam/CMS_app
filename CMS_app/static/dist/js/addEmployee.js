@@ -1,6 +1,6 @@
 #addEmployee.js
-function addEmployee(e) {
-    var addNewEmployee = $("#add_new_product_form");
+function addEmployee {
+    var addNewEmployee = $("#add_employee_form");
     $.ajax({
         type: 'POST',
         url: '/employees/new/',
