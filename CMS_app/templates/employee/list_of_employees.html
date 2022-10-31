@@ -23,7 +23,7 @@
                 <div class="col-md-12">
                     <!-- general form elements -->
                     <br>
-                    <div class="card card-link">
+                    <div>
                         <!-- /.card-header -->
                         <!-- table start -->
 
@@ -44,7 +44,7 @@
                                     {% for employee in all_employees %}
                                         <tr>
                                             <td>
-                                                <a href="#">
+                                                <a href="{% url 'view-employee' employee.id %}">
                                                     {{ employee.last_name }} {{ employee.first_name }}
                                                 </a>
                                             </td>

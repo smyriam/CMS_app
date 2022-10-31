@@ -3,10 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from CMS_app.forms import AddEmployeeForm, AddCourse, EmployeeForm
 from CMS_app.backend import Backend
-from CMS_app.models import Employee, Course
+from CMS_app.models import Employee, Course, CourseEmployee
 
 
 # Create your views here.
@@ -50,14 +50,42 @@ def reset_password(request):
 def admin_home(request):
     employees_count = Employee.objects.all().count()
     courses_count = Course.objects.all().count()
-    return render(request, "dashboard/dashboard.html", {"employees_count":employees_count, "courses_count":courses_count})
+    return render(request, "dashboard/dashboard.html",
+                  {"employees_count": employees_count, "courses_count": courses_count})
 
 
-class add_employee_view(CreateView):
+class AddEmployeeView(CreateView):
     template_name = 'employee/add_employee.html'
     model = Employee
     form_class = EmployeeForm
     success_url = reverse_lazy('list-of-employees')
+
+
+# def employee_details(request, pk):
+#     employee_data = Employee.objects.get(id=pk)
+#     # transport_costs = CourseEmployee.objects.filter(employee_id_id=pk).aggregate(sum("transport_costs"))['transport_costs__sum'] or 0
+#     transport_costs = CourseEmployee.objects.filter(employee_id_id=pk).aggregate(Sum('transport_costs')) or 0
+#     template = loader.get_template('employee/employee_details.html')
+#     context = {
+#         'employee_data': employee_data, 'transport_costs': transport_costs
+#     }
+#     return HttpResponse(template.render(context, request))
+
+
+class EmployeeDetailsView(DetailView):
+    template_name = 'employee/employee_details.html'
+    model = Employee
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        # select = CourseEmployee.objects.filter(employee_id_id=self.kwargs['pk']).values_list('course_id', flat=True).get()
+        select = CourseEmployee.objects.filter(employee_id_id=self.kwargs['pk']).get()
+        courses = Course.objects.filter(id=select).get() or 0
+        # select = CourseEmployee.objects.filter(employee_id_id=self.kwargs['pk']).values('course_id_id')
+        # courses = Course.objects.filter(id=select)
+        data['courses'] = courses
+
+        return data
 
 
 def add_employee(request):
@@ -68,8 +96,8 @@ def add_employee(request):
             form.save(commit=True)
             return JsonResponse({'msg': 'Data saved'})
         else:
-            print("ERROR FORM INVALID")
-            return JsonResponse({'msg': 'ERROR FORM INVALID'})
+            print("ERROR, FORM INVALID")
+            return JsonResponse({'msg': 'ERROR, FORM INVALID'})
     else:
         form = AddEmployeeForm()
     return JsonResponse({'form': form})
@@ -104,3 +132,6 @@ def delete_course(request, pk):
     return redirect('list-of-courses')
 
 
+class CourseDetailsView(DetailView):
+    template_name = 'course/course_details.html'
+    model = Course
