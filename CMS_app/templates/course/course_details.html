@@ -10,6 +10,45 @@
 
 {% endblock page_button %}
 
+
+{% block custom_css %}
+
+    <style>
+
+        .flexbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            margin: 0;
+            min-height: 24em;
+
+        }
+
+        .flexbox-item {
+            max-width: 50%;
+
+        }
+
+        .fixed {
+            flex: none;
+            max-width: 50%;
+        }
+
+        .item-centered {
+            width: 100%;
+            padding: 1em;
+        }
+
+        .large-icon {
+            font-size: 6rem;
+        }
+
+    </style>
+
+{% endblock custom_css %}
+
+
 {% block main_content %}
 
 
@@ -24,7 +63,53 @@
                         <!-- /.card-header -->
                         <!-- table start -->
 
-                        {% if all_employees %}
+                        {% if employees %}
+
+                                                        <!-- widget start -->
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Courses</span>
+                                            <span class="info-box-number">233</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Transport</span>
+                                            <span class="info-box-number">233</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Accomodation</span>
+                                            <span class="info-box-number">13,648</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Allowance</span>
+                                            <span class="info-box-number">93,139</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- widget end -->
+
+                            <!-- table start -->
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-hover text-nowrap">
                                     <thead>
@@ -38,10 +123,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for employee in all_employees %}
+                                    {% for employee in employees %}
                                         <tr>
                                             <td>
-                                                <a href="#">
+                                                <a href="{% url 'view-employee' employee.id %}">
                                                     {{ employee.last_name }} {{ employee.first_name }}
                                                 </a>
                                             </td>
@@ -54,15 +139,12 @@
                                                 <span class="badge bg-gradient-gray">Inactive</span>
                                             {% endif %}
                                             </td>
-                                            <td width="20">
+                                            <td width="80">
 
                                                 <div class="btn-group">
-                                                    {#                                                    <button type="button" class="btn btn-light btn-sm">#}
-                                                    {#                                                        <i class="fas fa-plus"></i>#}
-                                                    {#                                                    </button>#}
-                                                    {#                                                    <button type="button" class="btn btn-light btn-sm">#}
-                                                    {#                                                        <i class="fas fa-pen"></i>#}
-                                                    {#                                                    </button>#}
+                                                    <button type="button" class="btn btn-light btn-sm">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
                                                     <button type="button" class="btn btn-light btn-sm"
                                                             data-toggle="modal"
                                                             data-target="#employee_{{ employee.id }}">
@@ -78,23 +160,23 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            Delete {{ employee.first_name }} {{ employee.last_name }}</h5>
+                                                            Remove {{ employee.first_name }} {{ employee.last_name }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Are you sure you want to delete
-                                                        <b>{{ employee.first_name }} {{ employee.last_name }}</b>?<br>
+                                                        Are you sure you want to remove association with
+                                                        <b>{{ employee.first_name }} {{ employee.last_name }}</b> for course <b>{{ course.course_name }}</b>?
                                                         This operation cannot be undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"
                                                                 data-dismiss="modal">Close
                                                         </button>
-                                                        <a href="{% url 'delete-employee' employee.id %}"
-                                                           class="btn btn-danger">Confirm Delete</a>
+                                                        <a href="{% url 'delete-course-employee' employee.id course.id %}"
+                                                           class="btn btn-danger">Remove association</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,11 +186,18 @@
 
                                     </tbody>
                                 </table>
-
                             </div>
+                             <!-- table end -->
+
                         {% else %}
-                            <div class="card-body text-center"><br>
-                                <h4 class="text-muted">No employee for this course</h4>
+                            <div class="flexbox-container">
+                            <div class="flexbox-item fixed">
+                                <div class="item-centered text-center">
+                                    <h1 class="text-muted large-icon"><i class="fas fa-user-tie"></i>
+                                    </h1>
+                                    <h4 class="text-muted">No employee available</h4>
+                                </div>
+                            </div>
                             </div>
                         {% endif %}
                     </div>

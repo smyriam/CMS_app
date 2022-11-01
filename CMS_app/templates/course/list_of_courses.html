@@ -55,15 +55,12 @@
                                             <td>{{ course.location_details }}</td>
                                             <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>
-                                            <td width="120">
+                                            <td width="80">
                                                 {#                                                <i class="fas fa-graduation-cap mr-3" aria-hidden="true"></i>#}
                                                 {#                                                <i class="fas fa-edit mr-3 blue-text" aria-hidden="true"></i>#}
 
 
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-light btn-sm">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
                                                     <button type="button" class="btn btn-light btn-sm">
                                                         <i class="fas fa-pen"></i>
                                                     </button>
@@ -73,13 +70,6 @@
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
-
-                                                {#                                                <button type="button" class="btn btn-block btn-light btn-xs"#}
-                                                {#                                                        data-toggle="modal"#}
-                                                {#                                                        data-target="#employee_{{ employee.id }}">#}
-                                                {#                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>#}
-                                                {#                                                </button>#}
-
                                             </td>
                                         </tr>
 
@@ -95,9 +85,8 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        This operation cannot be undone. <br>
                                                         Are you sure you want to delete course
-                                                        <b>{{ course.course_name }}</b>?
+                                                        <b>{{ course.course_name }}</b>?<br> This operation cannot be undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"

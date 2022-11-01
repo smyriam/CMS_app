@@ -32,7 +32,7 @@
                         {% url 'list-of-employees' as list_of_employees %}
                         <a href="{{ list_of_employees }}"
                            class="nav-link {% if request.path == list_of_employees %} active {% endif %}">
-                        <i class="nav-icon fas fa-address-book"></i>
+                        <i class="nav-icon fas fa-user-tie"></i>
                         <p>
                             Employees
                         </p>
@@ -42,7 +42,7 @@
                     {% url 'list-of-courses' as list_of_courses %}
                         <a href="{{ list_of_courses }}"
                            class="nav-link {% if request.path == list_of_courses %} active {% endif %}">
-                        <i class="nav-icon fas fa-list"></i>
+                        <i class="nav-icon fas fa-school"></i>
                         <p>
                             Courses
                         </p>

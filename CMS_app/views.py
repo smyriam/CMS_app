@@ -61,31 +61,29 @@ class AddEmployeeView(CreateView):
     success_url = reverse_lazy('list-of-employees')
 
 
-# def employee_details(request, pk):
-#     employee_data = Employee.objects.get(id=pk)
-#     # transport_costs = CourseEmployee.objects.filter(employee_id_id=pk).aggregate(sum("transport_costs"))['transport_costs__sum'] or 0
-#     transport_costs = CourseEmployee.objects.filter(employee_id_id=pk).aggregate(Sum('transport_costs')) or 0
-#     template = loader.get_template('employee/employee_details.html')
-#     context = {
-#         'employee_data': employee_data, 'transport_costs': transport_costs
-#     }
-#     return HttpResponse(template.render(context, request))
-
-
 class EmployeeDetailsView(DetailView):
     template_name = 'employee/employee_details.html'
     model = Employee
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        # select = CourseEmployee.objects.filter(employee_id_id=self.kwargs['pk']).values_list('course_id', flat=True).get()
-        select = CourseEmployee.objects.filter(employee_id_id=self.kwargs['pk']).get()
-        courses = Course.objects.filter(id=select).get() or 0
-        # select = CourseEmployee.objects.filter(employee_id_id=self.kwargs['pk']).values('course_id_id')
-        # courses = Course.objects.filter(id=select)
-        data['courses'] = courses
 
+        selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
+        courses = []
+        for i in selects:
+            courses.append(Course.objects.filter(id=i.course_id).first())
+        data['courses'] = courses
         return data
+
+    # def get_fee_data(self, **kwargs):
+    #     data = super().get_context_data(**kwargs)
+    #
+    #     selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
+    #     fee = []
+    #     for i in selects:
+    #         fee.append(Course.objects.filter(id=i.course_id).first())
+    #     data['fee'] = fee
+    #     return fee
 
 
 def add_employee(request):
@@ -133,5 +131,26 @@ def delete_course(request, pk):
 
 
 class CourseDetailsView(DetailView):
-    template_name = 'course/course_details.html'
-    model = Course
+        template_name = 'course/course_details.html'
+        model = Course
+
+        def get_context_data(self, **kwargs):
+            data = super().get_context_data(**kwargs)
+
+            selects = CourseEmployee.objects.filter(course_id=self.kwargs['pk']).all()
+            employees = []
+            for i in selects:
+                employees.append(Employee.objects.filter(id=i.employee_id).first())
+
+            data['employees'] = employees
+            return data
+
+
+def delete_course_employee(request, pk, cid):
+    CourseEmployee.objects.filter(employee_id=pk, course_id=cid).delete()
+    return redirect('view-course', cid)
+
+
+def delete_employee_course(request, pk, cid):
+    CourseEmployee.objects.filter(course_id=pk, employee_id=cid).delete()
+    return redirect('view-employee', cid)

@@ -64,7 +64,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, max_length=128)
     structure = models.CharField(choices=structure_options, max_length=8)
-    division = models.ForeignKey(Division, on_delete=models.DO_NOTHING, null=True)
+    division = models.ForeignKey(Division, on_delete=models.DO_NOTHING, blank=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -78,8 +78,8 @@ class Employee(models.Model):
 
 class CourseEmployee(models.Model):
     id = models.AutoField(primary_key=True)
-    course_id = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
-    employee_id = models.ForeignKey(Employee, on_delete=models.DO_NOTHING)
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
+    employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING)
     duration = models.IntegerField()
     source_of_funding = models.ForeignKey(Funding, on_delete=models.DO_NOTHING)
     transport_costs = models.IntegerField()

@@ -28,7 +28,7 @@ urlpatterns = [
     path('user_details', views.user_details),
     path('reset_password', views.reset_password, name='reset-password'),
     path('employees/add_form', views.AddEmployeeView.as_view(), name='add-employee'),
-    path('employees/add', views.add_employee, name='add-new-employee'),
+    path('employees/add/', views.add_employee, name='add-new-employee'),
     path('employees', views.EmployeesList.as_view(), name='list-of-employees'),
     path('employees/<int:pk>/', views.EmployeeDetailsView.as_view(), name='view-employee'),
     path('employees/<int:pk>/delete/', views.delete_employee, name='delete-employee'),
@@ -36,4 +36,6 @@ urlpatterns = [
     path('courses', views.CoursesList.as_view(), name='list-of-courses'),
     path('courses/<int:pk>/delete/', views.delete_course, name='delete-course'),
     path('courses/<int:pk>/view/', views.CourseDetailsView.as_view(), name='view-course'),
+    path('course_employee/<int:pk>/<int:cid>/delete/', views.delete_course_employee, name='delete-course-employee'),
+    path('employee_course/<int:pk>/<int:cid>/delete/', views.delete_employee_course, name='delete-employee-course'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

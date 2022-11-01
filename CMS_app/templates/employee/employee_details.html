@@ -7,8 +7,45 @@
     <div class="col">
         <a class="btn btn-block btn-primary" data-toggle="modal" href="#">Assign New Course</a>
     </div>
-
 {% endblock page_button %}
+
+{% block custom_css %}
+
+    <style>
+
+        .flexbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            margin: 0;
+            min-height: 24em;
+
+        }
+
+        .flexbox-item {
+            max-width: 50%;
+
+        }
+
+        .fixed {
+            flex: none;
+            max-width: 50%;
+        }
+
+        .item-centered {
+            width: 100%;
+            padding: 1em;
+        }
+
+        .large-icon {
+            font-size: 6rem;
+        }
+
+    </style>
+
+{% endblock custom_css %}
+
 
 {% block main_content %}
 
@@ -22,63 +59,55 @@
                     <br>
                     <div>
 
-                        <div class="row">
-                            <div class="col-md-3 col-sm-6 col-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Courses</span>
-                                        <span class="info-box-number">233</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Transport</span>
-                                        <span class="info-box-number">233</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Accomodation</span>
-                                        <span class="info-box-number">13,648</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Allowance</span>
-                                        <span class="info-box-number">93,139</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- /.card-header -->
-                        <!-- table start -->
-
-
+                        <!-- condition start -->
+                        {{ fee }}
                         {% if courses %}
+
+                            <!-- widget start -->
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Courses</span>
+                                            <span class="info-box-number">233</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Transport</span>
+                                            <span class="info-box-number">233</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Accomodation</span>
+                                            <span class="info-box-number">13,648</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Allowance</span>
+                                            <span class="info-box-number">93,139</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- widget end -->
+
+                            <!-- table start -->
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-hover text-nowrap">
                                     <thead>
@@ -96,38 +125,26 @@
                                     <tbody>
                                     {% for course in courses %}
                                         <tr>
-                                            <td>{{ course.course_name }}</td>
+                                            <td>
+                                                <a href="{% url 'view-course' course.id %}">
+                                                    {{ course.course_name }}</a></td>
                                             <td>{{ course.start_date }}</td>
                                             <td>{{ course.end_date }}</td>
                                             <td>{{ course.location }}</td>
                                             <td>{{ course.location_details }}</td>
                                             <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>
-                                            <td width="120">
-                                                {#                                                <i class="fas fa-graduation-cap mr-3" aria-hidden="true"></i>#}
-                                                {#                                                <i class="fas fa-edit mr-3 blue-text" aria-hidden="true"></i>#}
-
-
+                                            <td width="80">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-light btn-sm">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-light btn-sm">
-                                                        <i class="fas fa-pen"></i>
+                                                        <i class="fas fa-eye"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-light btn-sm"
                                                             data-toggle="modal"
-                                                            data-target="#">
+                                                            data-target="#course_{{ course.id }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
-
-                                                {#                                                <button type="button" class="btn btn-block btn-light btn-xs"#}
-                                                {#                                                        data-toggle="modal"#}
-                                                {#                                                        data-target="#employee_{{ employee.id }}">#}
-                                                {#                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>#}
-                                                {#                                                </button>#}
-
                                             </td>
                                         </tr>
 
@@ -136,7 +153,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
-                                                            Delete course {{ course.course_name }}</h5>
+                                                            Remove course {{ course.course_name }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -144,14 +161,14 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         This operation cannot be undone. <br>
-                                                        Are you sure you want to delete course
+                                                        Are you sure you want to remove association with course
                                                         <b>{{ course.course_name }}</b>?
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"
                                                                 data-dismiss="modal">Close
                                                         </button>
-                                                        <a href="%"
+                                                        <a href="{% url 'delete-employee-course' course.id employee.id %}"
                                                            class="btn btn-danger">Confirm Delete</a>
                                                     </div>
                                                 </div>
@@ -165,11 +182,16 @@
 
                             </div>
                         {% else %}
-                            <div class="card-body text-center"><br>
-                                <h4 class="text-muted">No data available</h4>
+                            <div class="flexbox-container">
+                                <div class="flexbox-item fixed">
+                                    <div class="item-centered text-center">
+                                        <h1 class="text-muted large-icon"><i class="fas fa-school"></i>
+                                        </h1>
+                                        <h4 class="text-muted">No course available</h4>
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
-
                     </div>
                     <!-- /.card -->
                 </div>
