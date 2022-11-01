@@ -19,7 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 80vh;
+            height: 70vh;
             margin: 0;
             min-height: 24em;
 
@@ -61,25 +61,52 @@
                     <br>
                     <div>
                         <!-- /.card-header -->
-                        <!-- table start -->
+                        <!-- course data start -->
+                        <div class="row">
+                            <div class="col-12 col-sm-3">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Course {{ course.location }}</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ course.location_details }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Date</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ course.start_date }} - {{ course.end_date }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Provider</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ course.provider }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3">
+                                <div class="info-box bg-light">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-center text-muted">Course Fee</span>
+                                        <span class="info-box-number text-center text-muted mb-0">{{ course.participation_fee }} lei</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- course data end -->
+
 
                         {% if employees %}
 
-                                                        <!-- widget start -->
+                            <!-- widget start -->
                             <div class="row">
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Courses</span>
-                                            <span class="info-box-number">233</span>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-3 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+                                        <span class="info-box-icon bg-success"><i class="fa fa-car-alt"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Transport</span>
                                             <span class="info-box-number">233</span>
@@ -89,7 +116,7 @@
 
                                 <div class="col-md-3 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                                        <span class="info-box-icon bg-warning"><i class="fa fa-bed"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Accomodation</span>
                                             <span class="info-box-number">13,648</span>
@@ -99,13 +126,24 @@
 
                                 <div class="col-md-3 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
+                                        <span class="info-box-icon bg-danger"><i class="fa fa-money-bill-alt"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Allowance</span>
                                             <span class="info-box-number">93,139</span>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-3 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-info"><i class="fa fa-receipt"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Participation Fee</span>
+                                            <span class="info-box-number">233</span>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                             <!-- widget end -->
 
@@ -168,7 +206,8 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         Are you sure you want to remove association with
-                                                        <b>{{ employee.first_name }} {{ employee.last_name }}</b> for course <b>{{ course.course_name }}</b>?
+                                                        <b>{{ employee.first_name }} {{ employee.last_name }}</b> for
+                                                        course <b>{{ course.course_name }}</b>?
                                                         This operation cannot be undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
@@ -187,17 +226,17 @@
                                     </tbody>
                                 </table>
                             </div>
-                             <!-- table end -->
+                            <!-- table end -->
 
                         {% else %}
                             <div class="flexbox-container">
-                            <div class="flexbox-item fixed">
-                                <div class="item-centered text-center">
-                                    <h1 class="text-muted large-icon"><i class="fas fa-user-tie"></i>
-                                    </h1>
-                                    <h4 class="text-muted">No employee available</h4>
+                                <div class="flexbox-item fixed">
+                                    <div class="item-centered text-center">
+                                        <h1 class="text-muted large-icon"><i class="fas fa-user-tie"></i>
+                                        </h1>
+                                        <h4 class="text-muted">No employee available</h4>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         {% endif %}
                     </div>
