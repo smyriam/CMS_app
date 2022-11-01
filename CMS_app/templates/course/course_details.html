@@ -44,6 +44,18 @@
             font-size: 6rem;
         }
 
+        .info-box {
+            margin-bottom: 0em;
+        !important;
+        }
+
+        .content {
+            padding-left: 0em;
+        !important;
+            padding-right: 0em;
+        !important;
+        }
+
     </style>
 
 {% endblock custom_css %}
@@ -53,51 +65,68 @@
 
 
     <!-- Main content -->
+
+    <div class="" id="accordion">
+        <div class="card card-secondary card-outline-tabs">
+            <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
+                <div class="card-header text-right">
+                    <h4 class="card-title w-100">
+                        Show full details
+                    </h4>
+                </div>
+            </a>
+            <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
+                <div class="card-body">
+
+                    <!-- course data start -->
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Course {{ course.location }}</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ course.location_details }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-3">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Date</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ course.start_date }} - {{ course.end_date }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-3">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Provider</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ course.provider }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-3">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">Course Fee</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ course.participation_fee }} lei</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- course data end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <!-- general form elements -->
-                    <br>
                     <div>
                         <!-- /.card-header -->
-                        <!-- course data start -->
-                        <div class="row">
-                            <div class="col-12 col-sm-3">
-                                <div class="info-box bg-light">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text text-center text-muted">Course {{ course.location }}</span>
-                                        <span class="info-box-number text-center text-muted mb-0">{{ course.location_details }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-3">
-                                <div class="info-box bg-light">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text text-center text-muted">Date</span>
-                                        <span class="info-box-number text-center text-muted mb-0">{{ course.start_date }} - {{ course.end_date }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-3">
-                                <div class="info-box bg-light">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text text-center text-muted">Provider</span>
-                                        <span class="info-box-number text-center text-muted mb-0">{{ course.provider }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-3">
-                                <div class="info-box bg-light">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text text-center text-muted">Course Fee</span>
-                                        <span class="info-box-number text-center text-muted mb-0">{{ course.participation_fee }} lei</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- course data end -->
-
 
                         {% if employees %}
 
@@ -126,7 +155,8 @@
 
                                 <div class="col-md-3 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-danger"><i class="fa fa-money-bill-alt"></i></span>
+                                        <span class="info-box-icon bg-danger"><i
+                                                class="fa fa-money-bill-alt"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Allowance</span>
                                             <span class="info-box-number">93,139</span>

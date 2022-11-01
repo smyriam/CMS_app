@@ -390,7 +390,7 @@
   background-color: #fff;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 1rem;
+  /*margin-bottom: 1rem;*/
   min-height: 80px;
   padding: .5rem;
   position: relative;
