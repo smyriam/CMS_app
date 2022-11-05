@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block page_title %}
     {{ employee }}
 {% endblock page_title %}
+
 {% block page_button %}
     <div class="col">
-        <a class="btn btn-block btn-primary" data-toggle="modal" href="#">Assign New Course</a>
+        <a class="btn btn-block btn-primary" data-toggle="" href="{% url 'employee-add-course' employee.id %}">Assign New Course</a>
     </div>
 {% endblock page_button %}
 
@@ -46,9 +48,7 @@
 
 {% endblock custom_css %}
 
-
 {% block main_content %}
-
 
     <!-- Main content -->
     <section class="content">
@@ -58,9 +58,7 @@
                     <!-- general form elements -->
                     <br>
                     <div>
-
                         <!-- condition start -->
-                        {{ fee }}
                         {% if courses %}
 
                             <!-- widget start -->
@@ -162,9 +160,8 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        This operation cannot be undone. <br>
                                                         Are you sure you want to remove association with course
-                                                        <b>{{ course.course_name }}</b>?
+                                                        <b>{{ course.course_name }}</b>? This operation cannot be undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"
@@ -181,7 +178,6 @@
 
                                     </tbody>
                                 </table>
-
                             </div>
                         {% else %}
                             <div class="flexbox-container">

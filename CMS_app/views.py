@@ -1,10 +1,10 @@
 from django.contrib.auth import login, logout
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
-from CMS_app.forms import AddEmployeeForm, AddCourse, EmployeeForm
+from django.views.generic import ListView, DetailView
+from CMS_app.forms import AddEmployeeForm, EmployeeForm, AddCourseForm
 from CMS_app.backend import Backend
 from CMS_app.models import Employee, Course, CourseEmployee
 
@@ -54,13 +54,6 @@ def admin_home(request):
                   {"employees_count": employees_count, "courses_count": courses_count})
 
 
-class AddEmployeeView(CreateView):
-    template_name = 'employee/add_employee.html'
-    model = Employee
-    form_class = EmployeeForm
-    success_url = reverse_lazy('list-of-employees')
-
-
 class EmployeeDetailsView(DetailView):
     template_name = 'employee/employee_details.html'
     model = Employee
@@ -86,6 +79,34 @@ class EmployeeDetailsView(DetailView):
     #     return fee
 
 
+class EmployeeAddCourse(DetailView):
+    template_name = 'employee/employee_add_course.html'
+    model = Employee
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        # selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
+        # all_courses = Course.objects.filter(active=True).all()
+        # courses = []
+        # for i in all_courses:
+        #     courses.append(Course.objects.filter(~Q(id=i.course_id)).first())
+        # data['courses'] = courses
+        # return data
+
+        selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
+        all_courses = Course.objects.filter(active=True).all()
+        result = []
+        for i in all_courses:
+            result.append(Course.objects.filter(~Q(id=i.id)).first())
+
+        courses = []
+        for i in result:
+            courses.append(Course.objects.filter(~Q(id=i.id)).first())
+        data['courses'] = courses
+        return data
+
+
 def add_employee(request):
     if request.method == "POST":
         form = AddEmployeeForm(request.POST)
@@ -93,11 +114,12 @@ def add_employee(request):
         if form.is_valid():
             form.save(commit=True)
             return JsonResponse({'msg': 'Data saved'})
+
         else:
             print("ERROR, FORM INVALID")
             return JsonResponse({'msg': 'ERROR, FORM INVALID'})
     else:
-        form = AddEmployeeForm()
+        form = EmployeeForm()
     return JsonResponse({'form': form})
 
 
@@ -112,11 +134,21 @@ def delete_employee(request, pk):
     return redirect('list-of-employees')
 
 
-class AddCourseView(CreateView):
-    template_name = 'course/add_course.html'
-    model = Course
-    form_class = AddCourse
-    success_url = reverse_lazy('list-of-courses')
+def add_course(request):
+    if request.method == "POST":
+        form = AddCourseForm(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            messages.success(request, "Data Saved")
+            return JsonResponse({'msg': 'Data saved'})
+
+        else:
+            print("ERROR, FORM INVALID")
+            return JsonResponse({'msg': 'ERROR, FORM INVALID'})
+    else:
+        form = AddCourseForm()
+    return JsonResponse({'form': form})
 
 
 class CoursesList(ListView):

@@ -1,20 +1,53 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block page_title %}
     Courses
 {% endblock page_title %}
+
 {% block page_button %}
     <div class="col">
-        <a class="btn btn-block btn-primary" href="{% url 'add-course' %}">New Course</a>
+        <a class="btn btn-block btn-primary" data-toggle="modal" href="#addNewCourse">New Course</a>
     </div>
-{##}
-{#    <div class="col">#}
-{#        <a class="btn btn-block btn-primary" data-toggle="modal" href="#new_employee">Modal</a>#}
-{#    </div>#}
-
 {% endblock page_button %}
 
-{% block main_content %}
+{% block custom_css %}
 
+    <style>
+
+        .flexbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            margin: 0;
+            min-height: 24em;
+
+        }
+
+        .flexbox-item {
+            max-width: 50%;
+
+        }
+
+        .fixed {
+            flex: none;
+            max-width: 50%;
+        }
+
+        .item-centered {
+            width: 100%;
+            padding: 1em;
+        }
+
+        .large-icon {
+            font-size: 6rem;
+        }
+
+    </style>
+
+{% endblock custom_css %}
+
+{% block main_content %}
 
     <!-- Main content -->
     <section class="content">
@@ -24,9 +57,7 @@
                     <!-- general form elements -->
                     <br>
                     <div>
-                        <!-- /.card-header -->
                         <!-- table start -->
-
                         {% if all_courses %}
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-hover text-nowrap">
@@ -56,9 +87,6 @@
                                             <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>
                                             <td width="80">
-                                                {#                                                <i class="fas fa-graduation-cap mr-3" aria-hidden="true"></i>#}
-                                                {#                                                <i class="fas fa-edit mr-3 blue-text" aria-hidden="true"></i>#}
-
 
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-light btn-sm">
@@ -86,7 +114,8 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         Are you sure you want to delete course
-                                                        <b>{{ course.course_name }}</b>?<br> This operation cannot be undone.
+                                                        <b>{{ course.course_name }}</b>?<br> This operation cannot be
+                                                        undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"
@@ -103,11 +132,16 @@
 
                                     </tbody>
                                 </table>
-
                             </div>
                         {% else %}
-                            <div class="card-body text-center"><br>
-                                <h4 class="text-muted">No data available</h4>
+                            <div class="flexbox-container">
+                                <div class="flexbox-item fixed">
+                                    <div class="item-centered text-center">
+                                        <h1 class="text-muted large-icon"><i class="fas fa-school"></i>
+                                        </h1>
+                                        <h4 class="text-muted">No course available</h4>
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
@@ -119,90 +153,97 @@
     <!-- /.content -->
 
 
-    <div class="modal fade" id="new_employee">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        New Employee </h5>
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+    <!-- Modal Add New Course-->
+    <div class="modal fade" id="addNewCourse" aria-labelledby="CourseFormLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="form" id="add_course_form">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="CourseFormLabel">New Course</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>First Neme</label>
-                                <input type="text" class="form-control" placeholder="Enter first name" name="first_name">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" class="form-control" placeholder="Enter last name" name="last_name">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="text" class="form-control" placeholder="Enter email" name="email">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
+                        {% csrf_token %}
+                        {{ form.as_p }}
 
-                            <div class="form-group">
-                                <label>Structure</label>
-                                <select class="form-control" name="structure">
-                                    <option>option 1</option>
-                                    <option>option 2</option>
-                                    <option>option 3</option>
-                                    <option>option 4</option>
-                                    <option>option 5</option>
-                                </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Course Name</label>
+                                    <input autofocus type="text" class="form-control" placeholder="Enter course name"
+                                           name="course_name">
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="col-sm-6">
-
-                            <div class="form-group">
-                                <label>Division</label>
-                                <select class="form-control" name="division">
-                                    <option>option 1</option>
-                                    <option>option 2</option>
-                                    <option>option 3</option>
-                                    <option>option 4</option>
-                                    <option>option 5</option>
-                                </select>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Provider</label>
+                                    <input type="text" class="form-control" placeholder="Enter provider name"
+                                           name="provider">
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group clearfix">
-                                <div class="icheck-primary d-inline">
-                                    <input type="checkbox" id="checkboxActive" name="active">
-                                    <label for="checkboxPrimary3">
-                                        Active
-                                    </label>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Start date</label>
+                                    <input type="date" class="form-control" placeholder="Enter Start Date" name="start_date">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>End date</label>
+                                    <input type="date" class="form-control" placeholder="Enter End Date" name="end_date">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <select class="form-control" id="structure" name="location">
+                                        <option value="none">---</option>
+                                        <option value="Intern">Intern</option>
+                                        <option value="Extern">Extern</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Location Details</label>
+                                    <input type="text" class="form-control" placeholder="Enter location details"
+                                           name="location_details">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Participation Fee</label>
+                                    <input type="number" class="form-control" placeholder="Enter participation fee"
+                                           name="participation_fee">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 p-lg-2">
+                                <div class="form-group clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="active" name="active" checked>
+                                        <label for="active">
+                                            Active
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="addCourse()">Save Course</button>
+                    </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close
-                    </button>
-                    <a href="%"
-                       class="btn btn-default">Save Employee</a>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
+    <!-- End Modal Add New Course-->
+
+    <!-- JS Scripts  -->
+    <script src="{% static "dist/js/form.js" %}"></script>
 
 {% endblock main_content %}
 

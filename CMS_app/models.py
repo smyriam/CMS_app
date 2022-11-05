@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -22,7 +23,7 @@ class Admin(models.Model):
 
 
 class Course(models.Model):
-    location_options =[('intern', 'Intern'), ('extern', 'Extern')]
+    location_options =[('Intern', 'Intern'), ('Extern', 'Extern')]
     id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=255)
     start_date = models.DateField()
@@ -58,13 +59,13 @@ class Funding(models.Model):
 
 
 class Employee(models.Model):
-    structure_options = [('central', 'Central'), ('regional', 'Regional')]
+    structure_options = [('Central', 'Central'), ('Regional', 'Regional')]
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, max_length=128)
     structure = models.CharField(choices=structure_options, max_length=8)
-    division = models.ForeignKey(Division, on_delete=models.DO_NOTHING, blank=True)
+    # division = models.ForeignKey(Division, on_delete=models.DO_NOTHING, blank=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
