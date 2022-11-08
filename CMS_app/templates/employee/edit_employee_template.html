@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}
+    Edit Employee {{ first_name }} {{ last_name }}
+{% endblock page_title %}
+
+{% block page_button %}
+
+    <div class="col">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'list-of-employees' %}"><i class="fa fa-times"></i></a>
+            </li>
+        </ul>
+    </div>
+
+{% endblock page_button %}
+
+
+{% block main_content %}
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <br>
+                    <div class="card card-primary">
+                        <!-- form start -->
+                        <div class="card-body">
+                            <form method="post" id="EmployeeForm" data-divisions-url="{% url 'ajax_load_divisions' %}"
+                                  class="form-horizontal" role="form">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <input type="submit" value="Save changes" class="btn btn-primary">
+                            </form>
+                        </div>
+                        <!-- /.form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            $("#id_structure").change(function () {
+                const url = $("#EmployeeForm").attr("data-divisions-url");
+                const structureId = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'structure_id': structureId
+                    },
+                    success: function (data) {
+                        $("#id_division").html(data);
+                    }
+                });
+            })
+
+        </script>
+    </section>
+
+{% endblock main_content %}

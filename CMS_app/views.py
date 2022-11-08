@@ -1,12 +1,12 @@
 from django.contrib.auth import login, logout
-from django.db.models import Q
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import ListView, DetailView
-from CMS_app.forms import AddEmployeeForm, EmployeeForm, AddCourseForm
+from CMS_app.forms import AddEmployeeForm, AddCourseForm, EditEmployeeForm
 from CMS_app.backend import Backend
-from CMS_app.models import Employee, Course, CourseEmployee
+from CMS_app.models import Employee, Course, CourseEmployee, Division
 
 
 # Create your views here.
@@ -68,41 +68,21 @@ class EmployeeDetailsView(DetailView):
         data['courses'] = courses
         return data
 
-    # def get_fee_data(self, **kwargs):
-    #     data = super().get_context_data(**kwargs)
-    #
-    #     selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
-    #     fee = []
-    #     for i in selects:
-    #         fee.append(Course.objects.filter(id=i.course_id).first())
-    #     data['fee'] = fee
-    #     return fee
-
 
 class EmployeeAddCourse(DetailView):
-    template_name = 'employee/employee_add_course.html'
+    template_name = 'employee/select_course.html'
     model = Employee
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        # selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
-        # all_courses = Course.objects.filter(active=True).all()
-        # courses = []
-        # for i in all_courses:
-        #     courses.append(Course.objects.filter(~Q(id=i.course_id)).first())
-        # data['courses'] = courses
-        # return data
-
-        selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
+        exclude = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
         all_courses = Course.objects.filter(active=True).all()
-        result = []
-        for i in all_courses:
-            result.append(Course.objects.filter(~Q(id=i.id)).first())
+        if exclude.count() == 0:
+            courses = []
+            for i in all_courses:
+                courses.append(Course.objects.filter(id=i.id).first())
 
-        courses = []
-        for i in result:
-            courses.append(Course.objects.filter(~Q(id=i.id)).first())
         data['courses'] = courses
         return data
 
@@ -119,8 +99,77 @@ def add_employee(request):
             print("ERROR, FORM INVALID")
             return JsonResponse({'msg': 'ERROR, FORM INVALID'})
     else:
-        form = EmployeeForm()
+        form = AddEmployeeForm()
     return JsonResponse({'form': form})
+
+
+def edit_employee(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    form = EditEmployeeForm(instance=employee)
+    if request.method == 'POST':
+        form = EditEmployeeForm(request.POST, instance=employee)
+        if form.is_valid():
+            form.save()
+            return redirect('list-of-employees')
+    return render(request, 'employee/edit_employee_template.html', {'form': form})
+
+
+def load_divisions(request):
+    structure_id = request.GET.get('structure_id')
+    divisions = Division.objects.filter(structure_id=structure_id).all()
+    return render(request, 'employee/division_options.html', {'divisions': divisions})
+
+
+# def edit_employee(request, employee_id):
+#     employee = Employee.objects.get(id=employee_id)
+#     form = EditEmployeeForm()
+#     form.fields['first_name'].initial = employee.first_name
+#     form.fields['last_name'].initial = employee.last_name
+#     form.fields['email'].initial = employee.email
+#     form.fields['structure'].initial = employee.structure
+#     form.fields['division'].initial = employee.division
+#     form.fields['active'].initial = employee.active
+#     return render(request, 'employee/edit_employee_template.html',
+#                   {'form': form, "first_name": employee.first_name, "last_name": employee.last_name })
+
+
+def edit_employee_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        employee_id = request.session.get("employee_id")
+        if employee_id == None:
+            return HttpResponseRedirect(reverse('list-of-employees'))
+
+        form = EditEmployeeForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            structure = form.cleaned_data['structure']
+            division = form.cleaned_data['division']
+            active = form.cleaned_data['active']
+
+            try:
+                employee = Employee.objects.get(id=employee_id)
+                employee.first_name = first_name
+                employee.last_name = last_name
+                employee.email = email
+                employee.structure = structure
+                employee.division = Division.objects.get(id=division)
+                employee.active = active
+                employee.save(commit=True)
+                
+                messages.success(request, "Successfully Edited Employee")
+                return HttpResponseRedirect(reverse('list-of-employees'))
+            except:
+                messages.error(request, "Failed to Edit Employee")
+                return HttpResponseRedirect(reverse('list-of-employees'))
+        else:
+            form = EditEmployeeForm(request.POST)
+            employee = Employee.objects.get(id=employee_id)
+            return render(request, 'employee/edit_employee_template.html',
+                          {"form": form, 'first_name': employee.first_name, 'last_name': employee.last_name })
 
 
 class EmployeesList(ListView):
@@ -151,6 +200,10 @@ def add_course(request):
     return JsonResponse({'form': form})
 
 
+def assign_course(request, employee_id):
+    employee = Employee.objects.get(id=employee_id)
+
+
 class CoursesList(ListView):
     template_name = 'course/list_of_courses.html'
     model = Course
@@ -163,19 +216,19 @@ def delete_course(request, pk):
 
 
 class CourseDetailsView(DetailView):
-        template_name = 'course/course_details.html'
-        model = Course
+    template_name = 'course/course_details.html'
+    model = Course
 
-        def get_context_data(self, **kwargs):
-            data = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
 
-            selects = CourseEmployee.objects.filter(course_id=self.kwargs['pk']).all()
-            employees = []
-            for i in selects:
-                employees.append(Employee.objects.filter(id=i.employee_id).first())
+        selects = CourseEmployee.objects.filter(course_id=self.kwargs['pk']).all()
+        employees = []
+        for i in selects:
+            employees.append(Employee.objects.filter(id=i.employee_id).first())
 
-            data['employees'] = employees
-            return data
+        data['employees'] = employees
+        return data
 
 
 def delete_course_employee(request, pk, cid):
@@ -186,3 +239,4 @@ def delete_course_employee(request, pk, cid):
 def delete_employee_course(request, pk, cid):
     CourseEmployee.objects.filter(course_id=pk, employee_id=cid).delete()
     return redirect('view-employee', cid)
+

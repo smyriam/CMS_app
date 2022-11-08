@@ -30,8 +30,11 @@ urlpatterns = [
 
                   path('employees', views.EmployeesList.as_view(), name='list-of-employees'),
                   path('employees/add/', views.add_employee, name='add-employee'),
+                  path('employees/<int:pk>/edit/', views.edit_employee, name='edit-employee'),
+                  path('employees/ajax/load-divisions', views.load_divisions, name='ajax_load_divisions'),
+                  path('employees/update/', views.edit_employee_save, name='edit-employee-save'),
                   path('employees/<int:pk>/', views.EmployeeDetailsView.as_view(), name='view-employee'),
-                  path('employees/<int:pk>/add_course', views.EmployeeAddCourse.as_view(), name='employee-add-course'),
+                  # path('employees/<int:pk>/add_course', views.assign_course, name='employee-assign-course'),
                   path('employees/<int:pk>/delete/', views.delete_employee, name='delete-employee'),
 
                   path('courses', views.CoursesList.as_view(), name='list-of-courses'),

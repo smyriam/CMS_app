@@ -82,7 +82,7 @@
                                             </td>
                                             <td>{{ course.start_date }}</td>
                                             <td>{{ course.end_date }}</td>
-                                            <td>{{ course.location }}</td>
+                                            <td>{{ course.get_location_display }}</td>
                                             <td>{{ course.location_details }}</td>
                                             <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>
@@ -202,8 +202,8 @@
                                     <label>Location</label>
                                     <select class="form-control" id="structure" name="location">
                                         <option value="none">---</option>
-                                        <option value="Intern">Intern</option>
-                                        <option value="Extern">Extern</option>
+                                        <option value="1">Intern</option>
+                                        <option value="2">Extern</option>
                                     </select>
                                 </div>
                             </div>

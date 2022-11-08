@@ -6,8 +6,11 @@
 {% endblock page_title %}
 
 {% block page_button %}
-    <div class="col">
-        <a class="btn btn-block btn-primary" data-toggle="" href="{% url 'employee-add-course' employee.id %}">Assign New Course</a>
+    <div class="btn-group">
+    <a class="btn btn-light btn-secondary" href="{% url 'edit-employee' employee.id %}">
+        <i class="fas fa-pen"></i>
+                                                    </a>
+        <a class="btn btn-primary" data-toggle="" href="#">Assign New Course</a>
     </div>
 {% endblock page_button %}
 
@@ -130,7 +133,7 @@
                                                     {{ course.course_name }}</a></td>
                                             <td>{{ course.start_date }}</td>
                                             <td>{{ course.end_date }}</td>
-                                            <td>{{ course.location }}</td>
+                                            <td>{{ course.get_location_display }}</td>
                                             <td>{{ course.location_details }}</td>
                                             <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>

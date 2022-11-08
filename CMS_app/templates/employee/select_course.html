@@ -85,7 +85,7 @@
                                     {% for course in courses %}
                                         <tr>
                                             <td>
-                                                <a href="#">
+                                                <a href="{% url 'add-employee-course' employee.id course.id %}">
                                                     {{ course.course_name }}</a></td>
                                             <td>{{ course.start_date }}</td>
                                             <td>{{ course.end_date }}</td>

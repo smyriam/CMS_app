@@ -67,7 +67,7 @@
                                     <tr>
                                         <th scope="col">Employee</th>
                                         <th scope="col">Structure</th>
-                                        {#                                        <th scope="col">Division</th>#}
+                                        <th scope="col">Division</th>
                                         <th scope="col">Courses</th>
                                         <th scope="col">Status</th>
                                         <th scope="col"></th>
@@ -81,8 +81,8 @@
                                                     {{ employee.last_name }} {{ employee.first_name }}
                                                 </a>
                                             </td>
-                                            <td>{{ employee.structure }}</td>
-                                            {#                                            <td>{{ employee.division }}</td>#}
+                                            <td>{{ employee.structure.structure }}</td>
+                                            <td>{{ employee.division.division }}</td>
                                             <td>No data</td>
                                             <td>{% if employee.active is True %}
                                                 <span class="badge bg-gradient-success">Active</span>
@@ -93,14 +93,12 @@
                                             <td width="80">
 
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-light btn-sm">
-                                                        <i class="fas fa-pen"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-light btn-sm"
-                                                            data-toggle="modal"
-                                                            data-target="#employee_{{ employee.id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    <a class="btn btn-light btn-sm" href="{% url 'edit-employee' employee.id %}">
+                                                    <i class="fas fa-pen"></i>
+                                                    </a>
+                                                    <a class="btn btn-light btn-sm" data-toggle="modal" href="#employee_{{ employee.id }}">
+                                                    <i class="fas fa-trash"></i>
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -201,8 +199,8 @@
                                     <label>Structure</label>
                                     <select class="form-control" id="structure" name="structure">
                                         <option value="none">---</option>
-                                        <option value="Central">Central</option>
-                                        <option value="Regional">Regional</option>
+                                        <option value="1">Central</option>
+                                        <option value="2">Regional</option>
                                     </select>
                                 </div>
                             </div>
