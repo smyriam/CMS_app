@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_title %}
-    Edit {{ form.first_name.value }} {{ form.last_name.value }}
+    Edit {{ form.course_name.value }}
 {% endblock page_title %}
 
 {% block page_button %}
@@ -29,8 +29,7 @@
                     <div class="card card-primary">
                         <!-- form start -->
                         <div class="card-body">
-                            <form method="post" id="EmployeeForm" data-divisions-url="{% url 'ajax_load_divisions' %}"
-                                  class="form-horizontal" role="form">
+                            <form method="post" id="CourseForm" class="form-horizontal" role="form">
                                 {% csrf_token %}
                                 {{ form.as_p }}
                                 <input type="submit" value="Save changes" class="btn btn-primary">
@@ -41,24 +40,24 @@
                 </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script>
-            $("#id_structure").change(function () {
-                const url = $("#EmployeeForm").attr("data-divisions-url");
-                const structureId = $(this).val();
-
-                $.ajax({
-                    url: url,
-                    data: {
-                        'structure_id': structureId
-                    },
-                    success: function (data) {
-                        $("#id_division").html(data);
-                    }
-                });
-            })
-
-        </script>
+{#        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>#}
+{#        <script>#}
+{#            $("#id_structure").change(function () {#}
+{#                const url = $("#EmployeeForm").attr("data-divisions-url");#}
+{#                const structureId = $(this).val();#}
+{##}
+{#                $.ajax({#}
+{#                    url: url,#}
+{#                    data: {#}
+{#                        'structure_id': structureId#}
+{#                    },#}
+{#                    success: function (data) {#}
+{#                        $("#id_division").html(data);#}
+{#                    }#}
+{#                });#}
+{#            })#}
+{##}
+{#        </script>#}
     </section>
 
 {% endblock main_content %}

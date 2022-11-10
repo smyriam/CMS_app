@@ -65,11 +65,11 @@
                                     <tr>
                                         <th scope="col">Course Name</th>
                                         <th scope="col">Start Date</th>
-                                        <th scope="col">End Date</th>
+                                        <th scope="col">Days</th>
                                         <th scope="col">Location</th>
-                                        <th scope="col">Location Details</th>
-                                        <th scope="col">Provider</th>
+                                        <th scope="col">Details</th>
                                         <th scope="col">Fee</th>
+                                        <th scope="col">Status</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -81,22 +81,24 @@
                                                     {{ course.course_name }}</a>
                                             </td>
                                             <td>{{ course.start_date }}</td>
-                                            <td>{{ course.end_date }}</td>
+                                            <td>{{ course.duration }}</td>
                                             <td>{{ course.get_location_display }}</td>
                                             <td>{{ course.location_details }}</td>
-                                            <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>
+                                            <td>{% if course.active is True %}
+                                                <span class="badge bg-gradient-success">Active</span>
+                                            {% elif course.active is False %}
+                                                <span class="badge bg-gradient-gray">Inactive</span>
+                                            {% endif %}</td>
                                             <td width="80">
 
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-light btn-sm">
-                                                        <i class="fas fa-pen"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-light btn-sm"
-                                                            data-toggle="modal"
-                                                            data-target="#course_{{ course.id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    <a class="btn btn-light btn-sm" href="{% url 'edit-course' course.id %}">
+                                                    <i class="fas fa-pen"></i>
+                                                    </a>
+                                                    <a class="btn btn-light btn-sm" data-toggle="modal" href="#course_{{ course.id }}">
+                                                    <i class="fas fa-trash"></i>
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -193,8 +195,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>End date</label>
-                                    <input type="date" class="form-control" placeholder="Enter End Date" name="end_date">
+                                    <label>Days</label>
+                                    <input type="number" class="form-control" placeholder="Enter Course Days" name="duration">
                                 </div>
                             </div>
                             <div class="col-sm-6">

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_title %}
-    Edit {{ form.first_name.value }} {{ form.last_name.value }}
+    Assign new course for {{ first_name }} {{ last_name }}
 {% endblock page_title %}
 
 {% block page_button %}
@@ -29,7 +29,7 @@
                     <div class="card card-primary">
                         <!-- form start -->
                         <div class="card-body">
-                            <form method="post" id="EmployeeForm" data-divisions-url="{% url 'ajax_load_divisions' %}"
+                            <form method="post" id="AssignCourseForm" data-funding-url="{% url 'ajax_load_funding' %}"
                                   class="form-horizontal" role="form">
                                 {% csrf_token %}
                                 {{ form.as_p }}
@@ -44,7 +44,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script>
             $("#id_structure").change(function () {
-                const url = $("#EmployeeForm").attr("data-divisions-url");
+                const url = $("#AssignCourseForm").attr("data-funding-url");
                 const structureId = $(this).val();
 
                 $.ajax({

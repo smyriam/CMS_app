@@ -56,6 +56,7 @@
                 <div class="col-md-12">
                     <!-- general form elements -->
                     <br>
+
                     <div>
                         <!-- /.card-header -->
                         <!-- table start -->
@@ -81,8 +82,8 @@
                                                     {{ employee.last_name }} {{ employee.first_name }}
                                                 </a>
                                             </td>
-                                            <td>{{ employee.structure.structure }}</td>
-                                            <td>{{ employee.division.division }}</td>
+                                            <td>{{ employee.structure.name }}</td>
+                                            <td>{{ employee.division.name }}</td>
                                             <td>No data</td>
                                             <td>{% if employee.active is True %}
                                                 <span class="badge bg-gradient-success">Active</span>
@@ -93,11 +94,13 @@
                                             <td width="80">
 
                                                 <div class="btn-group">
-                                                    <a class="btn btn-light btn-sm" href="{% url 'edit-employee' employee.id %}">
-                                                    <i class="fas fa-pen"></i>
+                                                    <a class="btn btn-light btn-sm"
+                                                       href="{% url 'edit-employee' employee.id %}">
+                                                        <i class="fas fa-pen"></i>
                                                     </a>
-                                                    <a class="btn btn-light btn-sm" data-toggle="modal" href="#employee_{{ employee.id }}">
-                                                    <i class="fas fa-trash"></i>
+                                                    <a class="btn btn-light btn-sm" data-toggle="modal"
+                                                       href="#employee_{{ employee.id }}">
+                                                        <i class="fas fa-trash"></i>
                                                     </a>
                                                 </div>
                                             </td>
@@ -204,16 +207,16 @@
                                     </select>
                                 </div>
                             </div>
-{#                            <div class="col-sm-6">#}
-{#                                <div class="form-group">#}
-{#                                    <label>Division</label>#}
-{#                                    <select class="form-control" id="division" name="division">#}
-{#                                        {% for division in divisions %}#}
-{#                                            <option value={{ division.id }}>{{ division.division_name }}</option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
-{#                                </div>#}
-{#                            </div>#}
+                            {#                            <div class="col-sm-6">#}
+                            {#                                <div class="form-group">#}
+                            {#                                    <label>Division</label>#}
+                            {#                                    <select class="form-control" id="division" name="division">#}
+                            {#                                        {% for division in divisions %}#}
+                            {#                                            <option value={{ division.id }}>{{ division.division_name }}</option>#}
+                            {#                                        {% endfor %}#}
+                            {#                                    </select>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
                             <div class="col-sm-12 p-lg-2">
                                 <div class="form-group clearfix">
                                     <div class="icheck-primary d-inline">

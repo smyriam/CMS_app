@@ -1,6 +1,6 @@
 from django import forms
-from django.forms import TextInput, EmailInput, Select, DateInput, NumberInput
-from CMS_app.models import Employee, Course, Division, CourseEmployee
+from django.forms import Select, NumberInput
+from CMS_app.models import Employee, Course, Division, CourseEmployee, Funding
 
 
 class AddEmployeeForm(forms.ModelForm):
@@ -9,23 +9,6 @@ class AddEmployeeForm(forms.ModelForm):
         model = Employee
         # fields = '__all__'
         fields = ['first_name', 'last_name', 'email', 'structure', 'active']
-
-
-class EmployeeForm(forms.ModelForm):
-    division_list = []
-    try:
-        divisions = Division.objects.all()
-        for division in divisions:
-            small_list = (division.id, division.division_name)
-            division_list.append(small_list)
-    except:
-        division_list = []
-
-    division = forms.ChoiceField(label="Division", choices="division_list", widget=forms.Select(attrs={'class':'form-control'}))
-
-    class Meta:
-        model = Employee
-        fields = ['first_name', 'last_name', 'email', 'structure', 'division', 'active']
 
 
 class EditEmployeeForm(forms.ModelForm):
@@ -38,7 +21,7 @@ class EditEmployeeForm(forms.ModelForm):
                     'email': forms.EmailInput(attrs={'class':'form-control'}),
                     'structure': forms.Select(attrs={'class':'form-control'}),
                     'division': forms.Select(attrs={'class': 'form-control'}),
-                    'active': forms.CheckboxInput(),
+                    'active': forms.CheckboxInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -48,11 +31,11 @@ class EditEmployeeForm(forms.ModelForm):
         if 'division' in self.data:
             try:
                 structure_id = int(self.data.get('structure'))
-                self.fields['division'].queryset = Division.objects.filter(structure_id=structure_id).order_by('division')
+                self.fields['division'].queryset = Division.objects.filter(structure_id=structure_id).order_by('name')
             except (ValueError, TypeError):
                 pass
         elif self.instance.pk:
-            self.fields['division'].queryset = self.instance.structure.division_set.order_by('division')
+            self.fields['division'].queryset = self.instance.structure.division_set.order_by('name')
 
 
 class AddCourseForm(forms.ModelForm):
@@ -61,30 +44,73 @@ class AddCourseForm(forms.ModelForm):
         fields = '__all__'
 
 
+class EditCourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = '__all__'
+        widgets = {
+                    'course_name': forms.TextInput(attrs={'class':'form-control'}),
+                    'start_date': forms.DateInput(attrs={'class':'form-control'}),
+                    'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+                    'provider': forms.TextInput(attrs={'class': 'form-control'}),
+                    'location': forms.Select(attrs={'class': 'form-control'}),
+                    'location_details': forms.TextInput(attrs={'class':'form-control'}),
+                    'participation_fee': forms.NumberInput(attrs={'class': 'form-control'}),
+                    'active': forms.CheckboxInput(),
+        }
+
+
 class AssignCourseForm(forms.ModelForm):
     class Meta:
         model = CourseEmployee
-        fields = ['source_of_funding', 'duration', 'transport_costs', 'accommodation_costs', 'allowance_costs']
+        fields = ['course', 'structure', 'division', 'transport_costs', 'accommodation_costs', 'allowance_costs']
 
         widgets = {
-            'source_of_funding': Select(attrs={'class': 'form-select'}),
-            'duration': NumberInput(attrs={'placeholder': 'Enter course duration',
-                'class': 'form-control'}),
-            'transport_costs': NumberInput(attrs={'placeholder': 'Enter transport cost',
-                'class': 'form-control'}),
-            'accommodation_costs': NumberInput(attrs={'placeholder': 'Enter accomodation cost',
-                'class': 'form-control'}),
-            'allowance_costs': NumberInput(attrs={'placeholder': 'Enter allowance cost',
-                'class': 'form-control'}),
+            'course': forms.Select(attrs={'class': 'form-control'}),
+            'structure': forms.Select(attrs={'class':'form-control'}),
+            'division': forms.Select(attrs={'class': 'form-control'}),
+            'transport_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+            'accommodation_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+            'allowance_costs': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-    # def clean(self):
-    #     cleaned_data = self.cleaned_data  # veti avea un dictionar cu toate valorile introduse in dictionar
-    #     all_students = Student.objects.all()  # interogati bd unde veti stoca toti studentii salvati in db
-    #     for student in all_students:  # iterez fiecare student salvat in db
-    #         if student.first_name == cleaned_data['first_name'] and student.last_name == cleaned_data['last_name']:
-    #             msg = f'This first name {cleaned_data["first_name"]} and ' \
-    #                   f'this last name {cleaned_data["last_name"]} exists in db'
-    #             self._errors['first_name'] = self.error_class([msg])
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['division'].queryset = Funding.objects.none()
 
-        # return cleaned_data
+        if 'division' in self.data:
+            try:
+                structure_id = int(self.data.get('structure'))
+                self.fields['division'].queryset = Funding.objects.filter(structure_id=structure_id).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['division'].queryset = self.instance.structure.division_set.order_by('name')
+
+
+class AssignEmployeeForm(forms.ModelForm):
+    class Meta:
+        model = CourseEmployee
+        fields = ['employee', 'structure', 'division', 'transport_costs', 'accommodation_costs', 'allowance_costs']
+
+        widgets = {
+            'employee': forms.Select(attrs={'class': 'form-control'}),
+            'structure': forms.Select(attrs={'class':'form-control'}),
+            'division': forms.Select(attrs={'class': 'form-control'}),
+            'transport_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+            'accommodation_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+            'allowance_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['division'].queryset = Funding.objects.none()
+
+        if 'division' in self.data:
+            try:
+                structure_id = int(self.data.get('structure'))
+                self.fields['division'].queryset = Funding.objects.filter(structure_id=structure_id).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['division'].queryset = self.instance.structure.division_set.order_by('name')

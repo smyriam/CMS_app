@@ -26,7 +26,7 @@ class Course(models.Model):
     id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=255)
     start_date = models.DateField()
-    end_date = models.DateField()
+    duration = models.IntegerField()
     location = models.CharField(choices=location_options, max_length=1)
     location_details = models.CharField(max_length=255)
     provider = models.CharField(max_length=255)
@@ -41,34 +41,33 @@ class Course(models.Model):
 
 
 class Structure(models.Model):
-    structure = models.CharField(max_length=8)
+    name = models.CharField(max_length=8)
 
     def __str__(self):
-        return self.structure
+        return self.name
 
 
 class Division(models.Model):
     structure = models.ForeignKey(Structure, on_delete=models.CASCADE)
-    division = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
 
     def __str__(self):
-        return self.division
+        return self.name
 
 
 class FundStruct(models.Model):
-    id = models.AutoField(primary_key=True)
-    structure_name = models.CharField(max_length=32)
-    objects = models.Manager()
+    name = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name
 
 
 class Funding(models.Model):
-    id = models.AutoField(primary_key=True)
-    structure = models.ForeignKey(FundStruct, on_delete=models.DO_NOTHING)
-    substructure = models.CharField(max_length=64)
-    objects = models.Manager()
+    structure = models.ForeignKey(FundStruct, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64)
 
     def __str__(self):
-        return f'{self.substructure}'
+        return self.name
 
 
 class Employee(models.Model):
@@ -91,16 +90,20 @@ class Employee(models.Model):
 class CourseEmployee(models.Model):
     id = models.AutoField(primary_key=True)
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
-    employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING)
-    duration = models.IntegerField(blank=True)
-    source_of_funding = models.ForeignKey(Funding, on_delete=models.DO_NOTHING, blank=True)
-    transport_costs = models.IntegerField(blank=True)
-    accommodation_costs = models.IntegerField(blank=True)
-    allowance_costs = models.IntegerField(blank=True)
+    employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, blank=True, null=True)
+    duration = models.IntegerField(default=2)
+    structure = models.ForeignKey(FundStruct, on_delete=models.SET_NULL, blank=True, null=True)
+    division = models.ForeignKey(Funding, on_delete=models.SET_NULL, blank=True, null=True)
+    transport_costs = models.IntegerField(blank=True, null=True)
+    accommodation_costs = models.IntegerField(blank=True, null=True)
+    allowance_costs = models.IntegerField(blank=True, null=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
+    def __str__(self):
+        return f'{self.course.course_name} - {self.employee.first_name} {self.employee.last_name}'
 
 
 class Survey(models.Model):

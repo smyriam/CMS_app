@@ -3,14 +3,19 @@
 
 {% block page_title %}
     {{ employee }}
+    <h6 class="mb-0 p-2">
+        {% if employee.active is True %}
+            <span class="badge bg-gradient-success sm">Active</span>
+        {% elif employee.active is False %}
+            <span class="badge bg-gradient-gray">Inactive</span>
+        {% endif %}
+    </h6>
 {% endblock page_title %}
 
 {% block page_button %}
     <div class="btn-group">
-    <a class="btn btn-light btn-secondary" href="{% url 'edit-employee' employee.id %}">
-        <i class="fas fa-pen"></i>
-                                                    </a>
-        <a class="btn btn-primary" data-toggle="" href="#">Assign New Course</a>
+        <a class="btn btn-secondary" href="{% url 'edit-employee' employee.id %}">Edit</a>
+        <a class="btn btn-primary" data-toggle="" href="{% url 'assign-course' employee.id %}">Assign New Course</a>
     </div>
 {% endblock page_button %}
 
@@ -89,7 +94,8 @@
 
                                 <div class="col-md-3 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-danger"><i class="fa fa-money-bill-alt"></i></span>
+                                        <span class="info-box-icon bg-danger"><i
+                                                class="fa fa-money-bill-alt"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Allowance</span>
                                             <span class="info-box-number">93,139</span>
@@ -117,11 +123,11 @@
                                     <tr>
                                         <th scope="col">Course Name</th>
                                         <th scope="col">Start Date</th>
-                                        <th scope="col">End Date</th>
+                                        <th scope="col">Days</th>
                                         <th scope="col">Location</th>
-                                        <th scope="col">Location Details</th>
-                                        <th scope="col">Provider</th>
+                                        <th scope="col">Details</th>
                                         <th scope="col">Fee</th>
+                                        <th scope="col">Status</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -132,11 +138,16 @@
                                                 <a href="{% url 'view-course' course.id %}">
                                                     {{ course.course_name }}</a></td>
                                             <td>{{ course.start_date }}</td>
-                                            <td>{{ course.end_date }}</td>
+                                            <td>{{ course.duration }}</td>
                                             <td>{{ course.get_location_display }}</td>
                                             <td>{{ course.location_details }}</td>
-                                            <td>{{ course.provider }}</td>
                                             <td>{{ course.participation_fee }}</td>
+                                            <td>
+                                                {% if course.active is True %}
+                                                    <span class="badge bg-gradient-success">Active</span>
+                                                {% elif course.active is False %}
+                                                    <span class="badge bg-gradient-gray">Inactive</span>
+                                                {% endif %}</td>
                                             <td width="80">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-light btn-sm">
@@ -164,7 +175,8 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         Are you sure you want to remove association with course
-                                                        <b>{{ course.course_name }}</b>? This operation cannot be undone.
+                                                        <b>{{ course.course_name }}</b>? This operation cannot be
+                                                        undone.
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-default"

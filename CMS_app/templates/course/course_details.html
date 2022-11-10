@@ -2,10 +2,18 @@
 {% load static %}
 {% block page_title %}
     {{ course.course_name }}
+    <h6 class="mb-0 p-2">
+    {% if course.active is True %}
+        <span class="badge bg-gradient-success sm">Active</span>
+    {% elif course.active is False %}
+        <span class="badge bg-gradient-gray">Inactive</span>
+    {% endif %}
+    </h6>
 {% endblock page_title %}
 {% block page_button %}
-    <div class="col">
-        <a class="btn btn-block btn-primary" data-toggle="modal" href="#">Assign Employee</a>
+    <div class="btn-group">
+        <a class="btn btn-secondary" href="{% url 'edit-course' course.id %}">Edit</a>
+        <a class="btn btn-primary" data-toggle="" href="{% url 'assign-employee' course.id %}">Assign New Employee</a>
     </div>
 
 {% endblock page_button %}
@@ -18,7 +26,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 70vh;
+            height: 65vh;
             margin: 0;
             min-height: 24em;
 
@@ -65,17 +73,10 @@
 
     <!-- Main content -->
 
-    <div class="" id="accordion">
+    <div class="course_date" id="accordion">
         <div class="card card-primary card-outline-tabs">
             <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
-                <div class="card-header text-right">
-                    <h4 class="card-title w-100">
-                        Show full details
-                    </h4>
-                </div>
-            </a>
-            <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
-                <div class="card-body">
+                <div class="card-header">
 
                     <!-- course data start -->
                     <div class="row">
@@ -90,8 +91,8 @@
                         <div class="col-12 col-sm-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
-                                    <span class="info-box-text text-center text-muted">Date</span>
-                                    <span class="info-box-number text-center text-muted mb-0">{{ course.start_date }} - {{ course.end_date }}</span>
+                                    <span class="info-box-text text-center text-muted">Duration</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ course.start_date }} ({{ course.duration }} days)</span>
                                 </div>
                             </div>
                         </div>
@@ -106,13 +107,22 @@
                         <div class="col-12 col-sm-3">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
-                                    <span class="info-box-text text-center text-muted">Course Fee</span>
+                                    <span class="info-box-text text-center text-muted">Participation Fee</span>
                                     <span class="info-box-number text-center text-muted mb-0">{{ course.participation_fee }} lei</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- course data end -->
+
+                </div>
+            </a>
+            <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
+                <div class="card-body">
+
+                    <!-- course details start -->
+                    Some data
+                    <!-- course details end -->
 
                 </div>
             </div>
@@ -128,53 +138,6 @@
                         <!-- /.card-header -->
 
                         {% if employees %}
-
-                            <!-- widget start -->
-                            <div class="row">
-
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-success"><i class="fa fa-car-alt"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Transport</span>
-                                            <span class="info-box-number">233</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-warning"><i class="fa fa-bed"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Accomodation</span>
-                                            <span class="info-box-number">13,648</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-danger"><i
-                                                class="fa fa-money-bill-alt"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Allowance</span>
-                                            <span class="info-box-number">93,139</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-info"><i class="fa fa-receipt"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Participation Fee</span>
-                                            <span class="info-box-number">233</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!-- widget end -->
 
                             <!-- table start -->
                             <div class="card-body table-responsive p-0">
