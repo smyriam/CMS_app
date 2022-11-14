@@ -114,3 +114,18 @@ class AssignEmployeeForm(forms.ModelForm):
                 pass
         elif self.instance.pk:
             self.fields['division'].queryset = self.instance.structure.division_set.order_by('name')
+
+
+class EditAssignForm(forms.ModelForm):
+    class Meta:
+        model = CourseEmployee
+        fields = ['structure', 'division', 'transport_costs', 'accommodation_costs', 'allowance_costs']
+
+        widgets = {
+            'structure': forms.Select(attrs={'class':'form-control'}),
+            'division': forms.Select(attrs={'class': 'form-control'}),
+            'transport_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+            'accommodation_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+            'allowance_costs': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+

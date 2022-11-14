@@ -53,6 +53,23 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4><small class="text-muted">Filters</small></h4>
+                        </div>
+                        <form method="get">
+                            <div class="card-body">
+                                {{ my_filter.form.as_p }}
+                            </div>
+                            <div class="card-footer text-center">
+                                <button type="submit" class="btn btn-outline-success">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="col-md-12">
                     <!-- general form elements -->
                     <br>
@@ -93,11 +110,13 @@
                                             <td width="80">
 
                                                 <div class="btn-group">
-                                                    <a class="btn btn-light btn-sm" href="{% url 'edit-course' course.id %}">
-                                                    <i class="fas fa-pen"></i>
+                                                    <a class="btn btn-light btn-sm"
+                                                       href="{% url 'edit-course' course.id %}">
+                                                        <i class="fas fa-pen"></i>
                                                     </a>
-                                                    <a class="btn btn-light btn-sm" data-toggle="modal" href="#course_{{ course.id }}">
-                                                    <i class="fas fa-trash"></i>
+                                                    <a class="btn btn-light btn-sm" data-toggle="modal"
+                                                       href="#course_{{ course.id }}">
+                                                        <i class="fas fa-trash"></i>
                                                     </a>
                                                 </div>
                                             </td>
@@ -190,13 +209,15 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Start date</label>
-                                    <input type="date" class="form-control" placeholder="Enter Start Date" name="start_date">
+                                    <input type="date" class="form-control" placeholder="Enter Start Date"
+                                           name="start_date">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Days</label>
-                                    <input type="number" class="form-control" placeholder="Enter Course Days" name="duration">
+                                    <input type="number" class="form-control" placeholder="Enter Course Days"
+                                           name="duration">
                                 </div>
                             </div>
                             <div class="col-sm-6">

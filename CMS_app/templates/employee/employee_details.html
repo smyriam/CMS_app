@@ -150,14 +150,12 @@
                                                 {% endif %}</td>
                                             <td width="80">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-light btn-sm">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-light btn-sm"
-                                                            data-toggle="modal"
-                                                            data-target="#course_{{ course.id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    <a class="btn btn-light btn-sm" href="{% url 'edit-assign' pk=employee.id cid=course.id %}">
+                                                    <i class="fas fa-pen"></i>
+                                                    </a>
+                                                    <a class="btn btn-light btn-sm" data-toggle="modal" href="#course_{{ course.id }}">
+                                                    <i class="fas fa-trash"></i>
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>

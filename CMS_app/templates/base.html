@@ -37,6 +37,18 @@
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+
+{% for message in messages %}
+    <div class="text-right">
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message | safe }}
+    </div>
+    </div>
+{% endfor %}
+
 <div class="wrapper">
 
     <!-- Navbar -->
@@ -106,9 +118,9 @@
 <script src="{% static "plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static "dist/js/adminlte.js" %}"></script>
-
 <script src="{% static "/dist/js/dialog.js" %}"></script>
-{#<script src="{% static "/dist/js/toast.js" %}"></script>#}
+<script src="{% static "/dist/js/toast.js" %}"></script>
+
 
 {% block custom_js %}
 {% endblock custom_js %}
