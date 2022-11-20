@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
+
 {% load static %}
 {% block page_title %}
     Courses
@@ -50,29 +52,76 @@
 {% block main_content %}
 
     <!-- Main content -->
+
+    <div class="course_date" id="accordion">
+        <div class="card card-primary card-outline-tabs">
+            <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseOne" aria-expanded="false">
+                <div class="card-header">
+
+                    Filters
+
+                </div>
+            </a>
+            <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
+
+                <!-- filters start -->
+                <div class="col-md-12 p-0">
+
+                    <form method="get">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="form-group col-md-2">
+                                    {{ my_filter.form.course_name.label_tag }}
+                                    {% render_field my_filter.form.course_name class="form-control" %}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    {{ my_filter.form.start_date_gte.label_tag }}
+                                    {% render_field my_filter.form.start_date_gte class="form-control" %}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    {{ my_filter.form.start_date_lte.label_tag }}
+                                    {% render_field my_filter.form.start_date_lte class="form-control" %}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    {{ my_filter.form.location.label_tag }}
+                                    {% render_field my_filter.form.location class="form-control" %}
+                                </div>
+                                <div class="form-group col-md-2">
+                                    {{ my_filter.form.active.label_tag }}
+                                    {% render_field my_filter.form.active class="form-control" %}
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <div class="p-3"></div>
+                                    <div>
+                                        <button type="submit" class="btn btn-block btn-outline-success">
+                                            Filter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <div class="p-3"></div>
+                                    <div>
+                                        <a class="btn btn-block btn-outline-warning" href={% url 'list-of-courses' %}> Reset </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- filters end -->
+
+            </div>
+        </div>
+    </div>
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">
 
                 <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><small class="text-muted">Filters</small></h4>
-                        </div>
-                        <form method="get">
-                            <div class="card-body">
-                                {{ my_filter.form.as_p }}
-                            </div>
-                            <div class="card-footer text-center">
-                                <button type="submit" class="btn btn-outline-success">Search</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
                     <!-- general form elements -->
-                    <br>
                     <div>
                         <!-- table start -->
                         {% if all_courses %}

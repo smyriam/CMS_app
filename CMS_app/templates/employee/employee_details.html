@@ -77,7 +77,7 @@
                                         <span class="info-box-icon bg-success"><i class="fa fa-car-alt"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Transport</span>
-                                            <span class="info-box-number">233</span>
+                                            <span class="info-box-number">{{ transport_costs }} lei</span>
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@
                                         <span class="info-box-icon bg-warning"><i class="fa fa-bed"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Accomodation</span>
-                                            <span class="info-box-number">13,648</span>
+                                            <span class="info-box-number">{{ accomodation_costs }} lei</span>
                                         </div>
                                     </div>
                                 </div>
@@ -95,10 +95,10 @@
                                 <div class="col-md-3 col-sm-6 col-12">
                                     <div class="info-box">
                                         <span class="info-box-icon bg-danger"><i
-                                                class="fa fa-money-bill-alt"></i></span>
+                                                class="fa fa-utensils"></i></span>
                                         <div class="info-box-content">
                                             <span class="info-box-text">Allowance</span>
-                                            <span class="info-box-number">93,139</span>
+                                            <span class="info-box-number">{{ allowance_costs }} lei</span>
                                         </div>
                                     </div>
                                 </div>
@@ -180,8 +180,8 @@
                                                         <button type="button" class="btn btn-default"
                                                                 data-dismiss="modal">Close
                                                         </button>
-                                                        <a href="{% url 'delete-employee-course' course.id employee.id %}"
-                                                           class="btn btn-danger">Confirm Delete</a>
+                                                            <a href="{% url 'delete-employee-course' course.id employee.id %}"
+                                                               class="btn btn-danger">Confirm Delete</a>
                                                     </div>
                                                 </div>
                                             </div>

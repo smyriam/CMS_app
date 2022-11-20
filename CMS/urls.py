@@ -32,7 +32,8 @@ urlpatterns = [
                   path('employees/add/', views.add_employee, name='add-employee'),
                   path('employees/<int:pk>/edit/', views.edit_employee, name='edit-employee'),
                   path('employees/ajax/load-divisions', views.load_divisions, name='ajax_load_divisions'),
-                  path('employees/<int:pk>/', views.EmployeeDetailsView.as_view(), name='view-employee'),
+                  # path('employees/<int:pk>/', views.EmployeeDetailsView.as_view(), name='view-employee'),
+                  path('employees/<int:pk>/', views.employee_details, name='view-employee'),
                   path('employees/<int:pk>/delete/', views.delete_employee, name='delete-employee'),
 
                   path('courses', views.CoursesList.as_view(), name='list-of-courses'),

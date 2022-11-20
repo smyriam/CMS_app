@@ -6,11 +6,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import ListView, DetailView
 
-from CMS_app.filters import CourseFilter
+from CMS_app.filters import CourseFilter, EmployeeFilter
 from CMS_app.forms import AddEmployeeForm, AddCourseForm, EditEmployeeForm, EditCourseForm, AssignCourseForm, \
     AssignEmployeeForm, EditAssignForm
 from CMS_app.backend import Backend
 from CMS_app.models import Employee, Course, CourseEmployee, Division, Funding
+from django.db.models import Sum, Count, F, Value
 
 
 # Create your views here.
@@ -57,43 +58,52 @@ def reset_password(request):
 def admin_home(request):
     employees_count = Employee.objects.all().count()
     courses_count = Course.objects.all().count()
+    transport_costs = list(CourseEmployee.objects.aggregate(Sum('transport_costs')).values())[0]
+    accommodation_costs = list(CourseEmployee.objects.aggregate(Sum('accommodation_costs')).values())[0]
+    allowance_costs = list(CourseEmployee.objects.aggregate(Sum('allowance_costs')).values())[0]
+
     return render(request, "dashboard/dashboard.html",
-                  {"employees_count": employees_count, "courses_count": courses_count})
+                  {"employees_count": employees_count, "courses_count": courses_count, "transport_costs":transport_costs, "accommodation_costs": accommodation_costs, "allowance_costs": allowance_costs})
 
 
-class EmployeeDetailsView(LoginRequiredMixin, DetailView):
-    template_name = 'employee/employee_details.html'
-    model = Employee
+def employee_details(request, pk):
 
-    def get_context_data(self, **kwargs):
-        # pk = request.employee.course
-        data = super().get_context_data(**kwargs)
+    # Employee data
+    employee = Employee.objects.filter(id=pk).get()
 
-        selects = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
-        courses = []
-        for i in selects:
-            courses.append(Course.objects.filter(id=i.course_id).first())
-        data['courses'] = courses
-        return data
+    # Get employee courses
+    selects = CourseEmployee.objects.filter(employee_id=pk).all()
+    courses = []
+    for i in selects:
+        courses.append(Course.objects.filter(id=i.course_id).first())
 
+    # Get transport costs
+    transport = []
+    for i in selects:
+        transport.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('transport_costs', flat=True).first())
+    transport_costs = sum(transport)
 
-#
-# class EmployeeAddCourse(DetailView):
-#     template_name = 'employee/select_course.html'
-#     model = Employee
-#
-#     def get_context_data(self, **kwargs):
-#         data = super().get_context_data(**kwargs)
-#
-#         exclude = CourseEmployee.objects.filter(employee_id=self.kwargs['pk']).all()
-#         all_courses = Course.objects.filter(active=True).all()
-#         if exclude.count() == 0:
-#             courses = []
-#             for i in all_courses:
-#                 courses.append(Course.objects.filter(id=i.id).first())
-#
-#         data['courses'] = courses
-#         return data
+    # Get accomodation costs
+    accomodation = []
+    for i in selects:
+        accomodation.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('accommodation_costs', flat=True).first())
+    accommodation_costs = sum(accomodation)
+
+    # Get allowance costs
+    allowance = []
+    for i in selects:
+        allowance.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('allowance_costs', flat=True).first())
+    allowance_costs = sum(allowance)
+
+    context = {
+        'courses': courses,
+        'employee': employee,
+        'transport_costs': transport_costs,
+        'accomodation_costs': accommodation_costs,
+        'allowance_costs': allowance_costs
+    }
+
+    return render(request, 'employee/employee_details.html', context)
 
 
 @login_required
@@ -137,6 +147,16 @@ class EmployeesList(ListView):
     template_name = 'employee/list_of_employees.html'
     model = Employee
     context_object_name = 'all_employees'
+
+    def get_context_data(self, **kwargs):
+        data = super(EmployeesList, self).get_context_data(**kwargs)
+        employees = Employee.objects.all()
+        my_filter = EmployeeFilter(self.request.GET, queryset=employees)
+        employees = my_filter.qs
+        data['all_employees'] = employees
+        data['my_filter'] = my_filter
+
+        return data
 
 
 @login_required
@@ -211,22 +231,8 @@ class CourseDetailsView(LoginRequiredMixin, DetailView):
         for i in selects:
             employees.append(Employee.objects.filter(id=i.employee_id).first())
         data['employees'] = employees
+
         return data
-
-
-# class CourseDetailsView(LoginRequiredMixin, DetailView):
-#     template_name = 'course/course_details.html'
-#     model = CourseEmployee
-#
-#     def get_context_data(self, **kwargs):
-#         data = super().get_context_data(**kwargs)
-#
-#         courses = CourseEmployee.objects.filter(course_id=self.kwargs['pk']).all()
-#         selects = []
-#         for i in courses:
-#             selects.append(CourseEmployee.objects.filter(id=i.employee_id).first())
-#         data['employees'] = selects
-#         return data
 
 
 @login_required
