@@ -11,7 +11,7 @@ from CMS_app.forms import AddEmployeeForm, AddCourseForm, EditEmployeeForm, Edit
     AssignEmployeeForm, EditAssignForm
 from CMS_app.backend import Backend
 from CMS_app.models import Employee, Course, CourseEmployee, Division, Funding
-from django.db.models import Sum, Count, F, Value
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -58,12 +58,15 @@ def reset_password(request):
 def admin_home(request):
     employees_count = Employee.objects.all().count()
     courses_count = Course.objects.all().count()
-    transport_costs = list(CourseEmployee.objects.aggregate(Sum('transport_costs')).values())[0]
-    accommodation_costs = list(CourseEmployee.objects.aggregate(Sum('accommodation_costs')).values())[0]
+    transport = list(CourseEmployee.objects.aggregate(Sum('transport_costs')).values())[0]
+    transport_costs = int(transport)
+    accommodation = list(CourseEmployee.objects.aggregate(Sum('accommodation_costs')).values())[0]
+    accommodation_costs = int(accommodation)
     allowance_costs = list(CourseEmployee.objects.aggregate(Sum('allowance_costs')).values())[0]
+    total_days = list(CourseEmployee.objects.aggregate(Sum('duration')).values())[0]
 
     return render(request, "dashboard/dashboard.html",
-                  {"employees_count": employees_count, "courses_count": courses_count, "transport_costs":transport_costs, "accommodation_costs": accommodation_costs, "allowance_costs": allowance_costs})
+                  {"employees_count": employees_count, "courses_count": courses_count, "transport_costs":transport_costs, "accommodation_costs": accommodation_costs, "allowance_costs": allowance_costs, "total_days": total_days})
 
 
 def employee_details(request, pk):
@@ -95,12 +98,19 @@ def employee_details(request, pk):
         allowance.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('allowance_costs', flat=True).first())
     allowance_costs = sum(allowance)
 
+    # Get participation fee costs
+    course_fee = []
+    for i in selects:
+        course_fee.append(Course.objects.filter(id=i.course_id).values_list('participation_fee', flat=True).first())
+    course_fee = sum(course_fee)
+
     context = {
         'courses': courses,
         'employee': employee,
         'transport_costs': transport_costs,
         'accomodation_costs': accommodation_costs,
-        'allowance_costs': allowance_costs
+        'allowance_costs': allowance_costs,
+        'course_fee': course_fee,
     }
 
     return render(request, 'employee/employee_details.html', context)
