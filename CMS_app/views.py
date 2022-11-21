@@ -65,12 +65,25 @@ def admin_home(request):
     allowance_costs = list(CourseEmployee.objects.aggregate(Sum('allowance_costs')).values())[0]
     total_days = list(CourseEmployee.objects.aggregate(Sum('duration')).values())[0]
 
+    select = CourseEmployee.objects.all()
+    fee = []
+    for i in select:
+        fee.append(Course.objects.filter(id=i.course_id).values_list('participation_fee', flat=True).first())
+    participation_fee = sum(fee)
+
     return render(request, "dashboard/dashboard.html",
-                  {"employees_count": employees_count, "courses_count": courses_count, "transport_costs":transport_costs, "accommodation_costs": accommodation_costs, "allowance_costs": allowance_costs, "total_days": total_days})
+        {
+            "employees_count": employees_count,
+            "courses_count": courses_count,
+            "transport_costs": transport_costs,
+            "accommodation_costs": accommodation_costs,
+            "allowance_costs": allowance_costs,
+            "total_days": total_days,
+            "participation_fee": participation_fee
+        })
 
 
 def employee_details(request, pk):
-
     # Employee data
     employee = Employee.objects.filter(id=pk).get()
 
@@ -83,19 +96,25 @@ def employee_details(request, pk):
     # Get transport costs
     transport = []
     for i in selects:
-        transport.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('transport_costs', flat=True).first())
+        transport.append(
+            CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('transport_costs',
+                                                                                             flat=True).first())
     transport_costs = sum(transport)
 
     # Get accomodation costs
     accomodation = []
     for i in selects:
-        accomodation.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('accommodation_costs', flat=True).first())
+        accomodation.append(
+            CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('accommodation_costs',
+                                                                                             flat=True).first())
     accommodation_costs = sum(accomodation)
 
     # Get allowance costs
     allowance = []
     for i in selects:
-        allowance.append(CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('allowance_costs', flat=True).first())
+        allowance.append(
+            CourseEmployee.objects.filter(course_id=i.course_id, employee_id=pk).values_list('allowance_costs',
+                                                                                             flat=True).first())
     allowance_costs = sum(allowance)
 
     # Get participation fee costs
